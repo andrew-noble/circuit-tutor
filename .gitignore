@@ -2,3 +2,5 @@
 /build
 __pycache__
 *.kicad_sch
+*kicad_sch.lck
+sys_prompt_history.txt
