@@ -6,8 +6,12 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 # System prompt for KiCad s-expression translation
-SYSTEM_PROMPT = """You are a specialized assistant that translates natural language descriptions of electrical circuits into s-expressions for KiCad. 
-Your purpose is to convert text descriptions into properly formatted s-expressions that can be used in KiCad to create electrical diagrams.
+SYSTEM_PROMPT = """You are a specialized assistant that translates natural language 
+descriptions of electrical circuits into s-expressions for KiCad. 
+
+Your purpose is to convert text descriptions into properly formatted s-expressions 
+in the .kicad_sch format that can be used in KiCad to create electrical diagrams.
+
 Only respond with the s-expression, nothing else."""
 
 def setup_api_key():
@@ -38,6 +42,19 @@ def chat_with_gpt(client, prompt, model="gpt-4o", max_tokens=1000):
     except Exception as e:
         return f"Error: {str(e)}"
 
+def save_to_file(content, filename):
+    """Save content to a file with the given filename."""
+    try:
+        # Ensure the filename has the .kicad_sch extension
+        if not filename.endswith('.kicad_sch'):
+            filename += '.kicad_sch'
+            
+        with open(filename, 'w') as file:
+            file.write(content)
+        print(f"Response saved to {filename}")
+    except Exception as e:
+        print(f"Error saving to file: {str(e)}")
+
 def main():
     parser = argparse.ArgumentParser(description="Command line interface for ChatGPT")
     parser.add_argument("prompt", nargs="?", help="The prompt to send to ChatGPT")
@@ -47,6 +64,7 @@ def main():
                         help="Maximum number of tokens in the response (default: 1000)")
     parser.add_argument("--interactive", "-i", action="store_true",
                         help="Start an interactive chat session")
+    parser.add_argument("--output", "-o", help="Save the response to a .kicad_sch file")
     
     args = parser.parse_args()
     
@@ -87,6 +105,10 @@ def main():
     elif args.prompt:
         response = chat_with_gpt(client, args.prompt, args.model, args.max_tokens)
         print(response)
+        
+        # Save to file if output is specified
+        if args.output:
+            save_to_file(response, args.output)
     
     else:
         # If no prompt is provided and not in interactive mode, read from stdin
@@ -95,6 +117,10 @@ def main():
             if prompt:
                 response = chat_with_gpt(client, prompt, args.model, args.max_tokens)
                 print(response)
+                
+                # Save to file if output is specified
+                if args.output:
+                    save_to_file(response, args.output)
         else:
             parser.print_help()
 
