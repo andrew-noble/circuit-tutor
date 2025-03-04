@@ -23,4 +23,3 @@ class Circuit(BaseModel):
     components: list[Component]
     nets: list[Net]
     labels: list[Label]
-
