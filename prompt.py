@@ -4,15 +4,19 @@ import sys
 import argparse
 from openai import OpenAI
 from dotenv import load_dotenv
+from base_sch import BASE_SCHEMATIC  # Import the base schematic template
 
 # System prompt for KiCad s-expression translation
-SYSTEM_PROMPT = """You are a specialized assistant that translates natural language 
-descriptions of electrical circuits into s-expressions for KiCad. 
+SYSTEM_PROMPT = """You are a specialized assistant that translates natural language descriptions of electrical circuits into KiCad s-expressions for the purpose of generating explanatory schematics for students learning about circuits.
 
-Your purpose is to convert text descriptions into properly formatted s-expressions 
-in the .kicad_sch format that can be used in KiCad to create electrical diagrams.
+Output Requirements:
 
-Only respond with the s-expression, nothing else."""
+- Generate only symbol, wire, junction, no_connect, power, and label elements.
+- Ensure all circuits are electrically complete, including necessary power (V+, GND).
+- Reference component pins correctly in connections.
+- Do not include kicad_sch, title_block, or paper.
+- Output only raw s-expression code—no explanations, no formatting, no extra text.
+- it is critical that output is kicad-complient such that it can be loaded into kicad without modification."""
 
 def setup_api_key():
     """Load API key from environment variables or prompt user for it."""
@@ -42,18 +46,51 @@ def chat_with_gpt(client, prompt, model="gpt-4o", max_tokens=1000):
     except Exception as e:
         return f"Error: {str(e)}"
 
+def validate_and_clean_kicad_content(content):
+    """Validate and clean KiCad s-expression content."""
+    # Strip any markdown code block formatting
+    content = content.strip()
+    
+    # Handle various markdown code block formats
+    code_block_starts = ["```scheme", "```lisp", "```s-expression", "```", "```scm", "(circuit"]
+    for start in code_block_starts:
+        if content.startswith(start):
+            content = content[len(start):].strip()
+            break
+    
+    # Remove trailing code block markers
+    if content.endswith("```"):
+        content = content[:-3].strip()
+    
+    # Ensure the s-expression starts with a parenthesis
+    if not content.strip().startswith("("):
+        raise ValueError("The response doesn't appear to be a valid s-expression. It should start with '('")
+        
+    return content
+
+def inject_into_base_schematic(content):
+    """Inject the LLM-generated content into the base schematic template."""
+    return BASE_SCHEMATIC.format(body=content)
+
 def save_to_file(content, filename):
     """Save content to a file with the given filename."""
     try:
+        # Validate and clean the content before saving
+        cleaned_content = validate_and_clean_kicad_content(content)
+        
+        # Inject the cleaned content into the base schematic
+        full_schematic = inject_into_base_schematic(cleaned_content)
+        
         # Ensure the filename has the .kicad_sch extension
         if not filename.endswith('.kicad_sch'):
             filename += '.kicad_sch'
             
         with open(filename, 'w') as file:
-            file.write(content)
+            file.write(full_schematic)
         print(f"Response saved to {filename}")
     except Exception as e:
         print(f"Error saving to file: {str(e)}")
+        sys.exit(1)  # Exit with error code
 
 def main():
     parser = argparse.ArgumentParser(description="Command line interface for ChatGPT")
@@ -81,6 +118,7 @@ def main():
             {"role": "system", "content": SYSTEM_PROMPT}
         ]
         
+        #for extended conversations, not really important right now
         while True:
             user_input = input("\nYou: ")
             if user_input.lower() in ["exit", "quit", "q"]:
@@ -111,7 +149,7 @@ def main():
             save_to_file(response, args.output)
     
     else:
-        # If no prompt is provided and not in interactive mode, read from stdin
+        # If no prompt is provided and not in interactive mode, read from stdin. This is for piping
         if not sys.stdin.isatty():
             prompt = sys.stdin.read().strip()
             if prompt:
