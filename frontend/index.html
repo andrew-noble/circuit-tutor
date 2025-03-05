@@ -17,8 +17,8 @@
 
   <script>
 
-    const width = 400;
-    const height = 400;
+    const width = 100;
+    const height = 100;
 
     // Step 1: Select the div and create an SVG inside it
     const svg = d3.select("#canvas")
@@ -33,14 +33,9 @@
     //   .attr("r", 100)    // Radius
     //   .attr("fill", "steelblue");
 
-    svg.append("polyline")
-      .attr("points", "0 200 100 100 200 0")
-      .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("stroke-width", 2);
-
-    // Append the SVG element.
-    // container.append(svg.node());
+    // Append the resistor symbol. the "use" api is used because it allows one symbols.svg file
+    svg.append("use")
+      .attr("href", "/public/symbols.svg#resistor")
 
   </script>
 </body>
