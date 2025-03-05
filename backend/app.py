@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import os
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,7 +29,6 @@ You are a specialized assistant that translates natural language descriptions of
 
 - Ensure all circuits are electrically complete
 - Use standard component types: resistor, capacitor, inductor, voltage_source, current_source, ground
-- Position components in a logical layout for visualization
 - Output only valid JSON—no explanations or extra text
 """
 
@@ -62,7 +62,7 @@ async def request_circuit(data: dict = Body(...)):
     circuit_data = json.loads(response.choices[0].message.content)
     return circuit_data
 
-# uvicorn is a webserver, sorta like node. (asynchronous server gateway node)
+# uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True) 
