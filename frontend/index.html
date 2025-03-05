@@ -5,11 +5,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eng Vis</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+  <!-- <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script> -->
+
+  <div id="canvas"></div>
+
+  <script>
+
+    const width = 400;
+    const height = 400;
+
+    // Step 1: Select the div and create an SVG inside it
+    const svg = d3.select("#canvas")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+
+    // // Step 2: Append a circle to the SVG
+    // svg.append("circle")
+    //   .attr("cx", width / 2)   // Center X position
+    //   .attr("cy", height / 2)   // Center Y position
+    //   .attr("r", 100)    // Radius
+    //   .attr("fill", "steelblue");
+
+    svg.append("polyline")
+      .attr("points", "0 200 100 100 200 0")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("stroke-width", 2);
+
+    // Append the SVG element.
+    // container.append(svg.node());
+
+  </script>
 </body>
 
 </html>
