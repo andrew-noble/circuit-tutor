@@ -9,22 +9,13 @@
             </g>
         </symbol>
 
-        <symbol id="voltage_source" viewBox="0 0 100 50">
-            <path d="m 32.334216,27.614255 h 4.52694 v -1.44676 2.94018"
-                style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                id="path5149" />
-
-            <path d="m 43.437266,27.614255 h -4.75305 v -3.04364 6.14808"
-                style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                id="path5151" />
-
-            <path d="m 39.855296,26.073825 h 1.68168"
-                style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                id="path5153" />
-
-            <path d="m 40.696136,25.452025 v 1.24359"
-                style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                id="path5155" />
+        <symbol id="voltage-source" viewBox="0 0 100 50">
+            <g fill="none" stroke="#000">
+                <path d="m52.3 80.5h4.52v-1.45 2.94" stroke-width=".529" />
+                <path d="m63.4 80.5h-4.75v-3.04 6.14" stroke-width=".529" />
+                <path d="m59.9 79h1.68" stroke-width=".264px" />
+                <path d="m60.7 78.3v1.24" stroke-width=".264px" />
+            </g>
         </symbol>
 
     </defs>

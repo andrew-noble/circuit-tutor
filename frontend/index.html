@@ -34,8 +34,11 @@
     //   .attr("fill", "steelblue");
 
     // Append the resistor symbol. the "use" api is used because it allows one symbols.svg file
+    // svg.append("use")
+    //   .attr("href", "/public/symbols.svg#resistor")
+
     svg.append("use")
-      .attr("href", "/public/symbols.svg#resistor")
+      .attr("href", "/public/symbols.svg#voltage-source")
 
   </script>
 </body>
