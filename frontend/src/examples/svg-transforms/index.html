@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Transform Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #app {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Interactive SVG Components</h1>
+    <p>Use the buttons below to transform the components programmatically.</p>
+    <div id="app"></div>
+
+    <script type="module">
+        import { initExample } from './example.js';
+
+        // Initialize the example when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const components = initExample();
+            console.log('Example initialized with components:', components);
+        });
+    </script>
+</body>
+
+</html>

@@ -5,57 +5,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eng Vis</title>
-  <!-- Add D3.js library -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    svg {
-      border: 1px solid #ccc;
-    }
-
-    /* Make sure the symbol is visible */
-    use {
-      stroke: black;
-      stroke-width: 2px;
-      fill: none;
-    }
-  </style>
+  <!-- VERY helpful border -->
 </head>
 
 <body>
-  <h1>External SVG Symbol Import</h1>
 
-  <!-- Single SVG canvas -->
+  <div id="root"></div>
   <div id="canvas">
-    <svg id="d3-canvas" width="500" height="300"></svg>
   </div>
 
-  <script>
-    // Get the canvas
-    const svg = d3.select("#d3-canvas");
+  <script type="module">
 
-    // Add the resistor symbol
-    svg.append("use")
-      .attr("href", "public/svg/resistor.svg#resistor")
-      .attr("x", 50)
-      .attr("y", 50)
-      .attr("width", 200)
-      .attr("height", 100);
+    import { createSvg, createSvgElementFromReference } from "./test.js";
+
+    const svg = createSvg("#canvas", 1000, 1000);
+    const symbolWidth = 200;
+    const symbolHeight = 100;
 
     // Add the voltage source symbol
-    svg.append("use")
-      .attr("href", "public/svg/voltage-source.svg#voltage-source")
-      .attr("x", 250)
-      .attr("y", 50)
-      .attr("width", 200)
-      .attr("height", 100);
+    createSvgElementFromReference(svg, "/svg/voltage-source.svg#voltage-source", symbolWidth, symbolHeight)
+      .attr("transform", `translate(50, 300) rotate(-90, ${symbolWidth / 2}, ${symbolHeight / 2})`);
 
-    // Add the diode symbol
-    svg.append("use")
-      .attr("href", "public/svg/diode.svg#diode")
-      .attr("x", 150)
-      .attr("y", 150)
-      .attr("width", 200)
-      .attr("height", 100);
+    // Add the resistor symbol
+    createSvgElementFromReference(svg, "/svg/resistor.svg#resistor", symbolWidth, symbolHeight)
+      .attr("transform", `translate(250, 50)`);
+
   </script>
 
 </body>
