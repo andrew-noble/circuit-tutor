@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 import os
+import json
+import datetime
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
-import json
 from schema import Circuit
+from circuit_prompt import CIRCUIT_SYSTEM_PROMPT
 
 # Load environment variables
 load_dotenv()
@@ -24,16 +26,41 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-SYSTEM_PROMPT = """
-You are a specialized assistant that translates natural language descriptions of electrical circuits into JSON data structures suitable for D3.js visualization.
+MODEL = "gpt-4o"
 
-- Ensure all circuits are electrically complete
-- Use standard component types: resistor, capacitor, inductor, voltage_source, current_source, ground
-- Output only valid JSON—no explanations or extra text
-"""
+# Simple logging function
+def log_request_response(endpoint, system_prompt, user_prompt, response_data):
+    log_file = "./logs/request_logs.json"
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+    
+    log_entry = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "endpoint": endpoint,
+        "system_prompt": system_prompt,
+        "user_prompt": user_prompt,
+        "response": response_data
+    }
+    
+    # Load existing logs if file exists
+    if os.path.exists(log_file):
+        try:
+            with open(log_file, 'r') as f:
+                logs = json.load(f)
+        except json.JSONDecodeError:
+            # If file is corrupted, start with empty list
+            logs = []
+    else:
+        logs = []
+    
+    # Append new log entry
+    logs.append(log_entry)
+    
+    # Write back to file
+    with open(log_file, 'w') as f:
+        json.dump(logs, f, indent=2)
 
 #simple schema
-class ResponseLLM(BaseModel):
+class LlmResponse(BaseModel):
     data: str
 
 # Initialize OpenAI client
@@ -45,21 +72,46 @@ async def test():
 
 @app.post("/request-llm")
 async def request_llm(data: dict = Body(...)):
+    user_prompt = data["prompt"]
+    
     response = await client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
-        messages=[{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": data["prompt"]}],
-        response_format=ResponseLLM
+        model=MODEL,
+        messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": user_prompt}],
+        response_format=LlmResponse
     )
-    return {"message": response.choices[0].message.content}
+    
+    response_content = response.choices[0].message.content
+    
+    # Log the request and response
+    log_request_response(
+        endpoint="/request-llm",
+        system_prompt=CIRCUIT_SYSTEM_PROMPT,
+        user_prompt=user_prompt,
+        response_data=response_content
+    )
+    
+    return {"message": response_content}
 
 @app.post("/request-circuit")
 async def request_circuit(data: dict = Body(...)):
+    user_prompt = data["prompt"]
+    
     response = await client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
-        messages=[{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": data["prompt"]}],
+        model=MODEL,
+        messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": user_prompt}],
         response_format=Circuit
     )
+    
     circuit_data = json.loads(response.choices[0].message.content)
+    
+    # Log the request and response
+    log_request_response(
+        endpoint="/request-circuit",
+        system_prompt=CIRCUIT_SYSTEM_PROMPT,
+        user_prompt=user_prompt,
+        response_data=circuit_data
+    )
+    
     return circuit_data
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
