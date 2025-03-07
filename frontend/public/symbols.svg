@@ -1,22 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 100">
     <defs>
-        <symbol id="resistor" viewBox="0 0 100 50">
-            <g>
-                <path
-                    d="m17.5 54.2h3.73l0.516-1.47 0.844 2.82 0.938-2.86 0.82 2.82 0.891-2.79 0.891 2.8 0.492-1.37h3.75"
-                    fill="none" stroke="#000" stroke-miterlimit="5" stroke-width=".25" stroke-linecap="butt"
-                    stroke-linejoin="miter" />
+        <!-- Resistor Symbol -->
+        <symbol id="resistor" viewBox="0 0 100 100">
+            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+                <path d="M 0,50 H 20" fill="none" />
+                <path d="M 20,50 L 25,35 L 35,65 L 45,35 L 55,65 L 65,35 L 75,65 L 80,50" fill="none"
+                    stroke-linejoin="round" />
+                <path d="M 80,50 H 100" fill="none" />
             </g>
         </symbol>
 
-        <symbol id="voltage-source" viewBox="0 0 100 50">
-            <g fill="none" stroke="#000">
-                <path d="m52.3 80.5h4.52v-1.45 2.94" stroke-width=".529" />
-                <path d="m63.4 80.5h-4.75v-3.04 6.14" stroke-width=".529" />
-                <path d="m59.9 79h1.68" stroke-width=".264px" />
-                <path d="m60.7 78.3v1.24" stroke-width=".264px" />
+        <!-- Voltage Source Symbol (DC) -->
+        <symbol id="voltage-source" viewBox="0 0 100 100">
+            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+                <!-- Left terminal -->
+                <path d="M 0,50 H 40" fill="none" />
+                <!-- Negative (shorter) vertical line -->
+                <path d="M 40,35 V 65" fill="none" stroke-width="2" />
+                <!-- Positive (longer) vertical line -->
+                <path d="M 60,25 V 75" fill="none" stroke-width="2" />
+                <!-- Right terminal -->
+                <path d="M 60,50 H 100" fill="none" />
             </g>
         </symbol>
 
+        <!-- Diode Symbol -->
+        <symbol id="diode" viewBox="0 0 100 100">
+            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+                <path d="M 0,50 H 30" fill="none" />
+                <path d="M 30,50 L 70,25 L 70,75 Z" fill="none" />
+                <path d="M 70,25 L 70,75" fill="none" />
+                <path d="M 70,50 H 100" fill="none" />
+            </g>
+        </symbol>
     </defs>
+
+    <!-- Example usage (optional) -->
+    <!-- <use href="#resistor" x="10" y="10" width="50" height="50"/> -->
+    <!-- <use href="#voltage-source" x="70" y="10" width="50" height="50"/> -->
+    <!-- <use href="#diode" x="130" y="10" width="50" height="50"/> -->
 </svg>
