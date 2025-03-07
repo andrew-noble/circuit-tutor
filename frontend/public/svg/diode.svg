@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="diode">
+            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+                <!-- Left terminal -->
+                <path d="M 0,50 H 30" fill="none" />
+                <!-- Triangle -->
+                <path d="M 30,25 L 30,75 L 70,50 Z" fill="none" />
+                <!-- Vertical bar -->
+                <path d="M 30,25 L 30,75" fill="none" />
+                <!-- Right terminal -->
+                <path d="M 70,50 H 100" fill="none" />
+            </g>
+        </symbol>
+    </defs>
+</svg>

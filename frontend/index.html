@@ -5,42 +5,59 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eng Vis</title>
+  <!-- Add D3.js library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    svg {
+      border: 1px solid #ccc;
+    }
 
+    /* Make sure the symbol is visible */
+    use {
+      stroke: black;
+      stroke-width: 2px;
+      fill: none;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script> -->
+  <h1>External SVG Symbol Import</h1>
 
-  <div id="canvas"></div>
+  <!-- Single SVG canvas -->
+  <div id="canvas">
+    <svg id="d3-canvas" width="500" height="300"></svg>
+  </div>
 
   <script>
+    // Get the canvas
+    const svg = d3.select("#d3-canvas");
 
-    const width = 100;
-    const height = 100;
-
-    // Step 1: Select the div and create an SVG inside it
-    const svg = d3.select("#canvas")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-
-    // // Step 2: Append a circle to the SVG
-    // svg.append("circle")
-    //   .attr("cx", width / 2)   // Center X position
-    //   .attr("cy", height / 2)   // Center Y position
-    //   .attr("r", 100)    // Radius
-    //   .attr("fill", "steelblue");
-
-    // Append the resistor symbol. the "use" api is used because it allows one symbols.svg file
-    // svg.append("use")
-    //   .attr("href", "/public/symbols.svg#resistor")
-
+    // Add the resistor symbol
     svg.append("use")
-      .attr("href", "/public/symbols.svg#voltage-source")
+      .attr("href", "public/svg/resistor.svg#resistor")
+      .attr("x", 50)
+      .attr("y", 50)
+      .attr("width", 200)
+      .attr("height", 100);
 
+    // Add the voltage source symbol
+    svg.append("use")
+      .attr("href", "public/svg/voltage-source.svg#voltage-source")
+      .attr("x", 250)
+      .attr("y", 50)
+      .attr("width", 200)
+      .attr("height", 100);
+
+    // Add the diode symbol
+    svg.append("use")
+      .attr("href", "public/svg/diode.svg#diode")
+      .attr("x", 150)
+      .attr("y", 150)
+      .attr("width", 200)
+      .attr("height", 100);
   </script>
+
 </body>
 
 </html>
