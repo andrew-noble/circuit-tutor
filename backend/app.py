@@ -102,7 +102,7 @@ async def request_circuit(data: dict = Body(...)):
         response_format=Circuit
     )
     
-    circuit_data = json.loads(response.choices[0].message.content)
+    circuit_data = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
     
     # Log the request and response
     log_request_response(
@@ -112,7 +112,7 @@ async def request_circuit(data: dict = Body(...)):
         response_data=circuit_data
     )
     
-    return circuit_data
+    return circuit_data #python dict -> json (done by fastAPI automatically)
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
