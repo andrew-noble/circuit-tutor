@@ -1,5 +1,4 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-import circuitData from "./example-circ.json" assert { type: "json" };
 
 const padding = { top: 40, right: 40, bottom: 40, left: 40 };
 
