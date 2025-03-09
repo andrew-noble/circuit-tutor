@@ -3,18 +3,43 @@
 A llm-power engineering demonstrator
 
 ```
-frontend/
-├── src/
-│   ├── utils/
-│   │   └── svg/
-│   │       ├── index.js # Main entry point exporting all utilities
-│   │       ├── transforms.js # SVG transformation utilities
-│   │       ├── elements.js # SVG element creation utilities
-│   │       └── README.md # Documentation for the SVG utilities
-│   │
-│   └── examples/
-│       └── svg-transforms/
-│           ├── index.html # Example HTML page
-│           ├── example.js # Example JavaScript code
-│           └── README.md # Documentation for the example
+.
+├── frontend/
+│   ├── index.js
+│   ├── generateLayout.js
+│   ├── ex-circ.js
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── eslint.config.js
+│   ├── public/
+│   ├── node_modules/
+│   ├── examples/
+│   └── src/
+│       ├── utils/
+│       │   └── svg/
+│       │       ├── index.js
+│       │       ├── transforms.js
+│       │       ├── elements.js
+│       │       └── README.md
+│       └── examples/
+│           └── svg-transforms/
+│               ├── index.html
+│               ├── example.js
+│               └── README.md
+│
+├── backend/
+│   ├── app.py
+│   ├── schema.py
+│   ├── circuit_prompt.py
+│   ├── requirements.txt
+│   ├── useful-bash.sh
+│   ├── logs/
+│   ├── __pycache__/
+│   └── venv/
+│
+├── .gitignore
+├── .env
+└── README.md
 ```
