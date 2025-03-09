@@ -17,6 +17,7 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${padding.left}, ${padding.top})`);
 
+//SET UP AXES-------
 // domain is data-based (like 0-100%), range is pixel based (like 0-400px).
 // I suspect range will need to be dynamic based on responsivity
 const xScale = d3.scaleLinear().domain([0, 10]).range([0, width]);
@@ -24,31 +25,49 @@ const yScale = d3.scaleLinear().domain([-3, 3]).range([height, 0]); //range reve
 
 const gx = svg
   .append("g")
-  .attr("class", "x-axis")
+  .classed("x-axis", true)
   .attr("transform", `translate(0, ${height})`) //translate to bottom of svg
   .call(d3.axisBottom(xScale));
 
 const gy = svg
   .append("g")
-  .attr("class", "y-axis")
+  .classed("y-axis", true)
   .attr("transform", `translate(0, 0)`) //translate to bottom of svg
   .call(d3.axisLeft(yScale));
+//----------------
 
-const layout = generateLayout(circuitData); //generate layout
-console.log(layout);
+async function loadSymbols() {
+  const spriteSheet = await d3.xml("/svg/symbol-sheet.svg");
+  const defs = spriteSheet.documentElement.querySelector("defs"); //target defs section in the symbol sprite sheet
+  svg.append("defs").node().appendChild(defs.cloneNode(true)); //inject defs section in this document
+}
 
-//now we can render the circuit
+function renderCircuit() {
+  const layout = generateLayout(circuitData); //generate layout
 
-//create a group for the components
-// const componentGroup = svg.append("g").classed("components", true);
+  // Map component types to symbol IDs
+  const typeToSymbol = {
+    resistor: "#resistor",
+    voltage_source: "#voltage-source",
+    diode: "#diode",
+  };
 
-svg
-  .selectAll("circle")
-  .data(layout)
-  .join("circle")
-  .attr("cx", (d) => xScale(d.position.x))
-  .attr("cy", (d) => yScale(d.position.y))
-  .attr("r", 10);
+  //create a group for the components
+  const componentGroup = svg
+    .append("g")
+    .classed("components", true)
+    .selectAll("use")
+    .data(layout)
+    .join("use")
+    .attr("xlink:href", (d) => typeToSymbol[d.type]) // Map component type to symbol ID
+    .attr("x", (d) => xScale(d.position.x))
+    .attr("y", (d) => yScale(d.position.y) - 50) // Center vertically
+    .attr("width", 100)
+    .attr("height", 100);
 
-//create a group for the nets (no net data though yet)
-const netGroup = svg.append("g").classed("nets", true);
+  //create a group for the nets (no net data though yet)
+  const netGroup = svg.append("g").classed("nets", true);
+}
+
+loadSymbols();
+renderCircuit(circuitData);
