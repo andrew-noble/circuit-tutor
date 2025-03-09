@@ -1,20 +1,18 @@
 import circuitData from "./ex-circ.js";
 
-//this file takes a pydantic circuit representation and augments it with positions
+//this file takes a json circuit representation (list of components, list of nets)
+// and returns a simple array of components augmented with positions
 //in preparation for rendering via d3 in index.js
 
 //input: json from llm, format: {components[], nets[], labels[]}
-//output: json, format: [{name:..., etc, position:{x, y}}]
-//the output order matters for rendering the traces correctly
+//output: json, format (for now): [component{...component, position: {x, y}}]
+//the output order matters for rendering the traces correctly. The
+//algo runs around the circuit starting with voltage source
 
-// const fetchCircuit = async () => {
-//     const response = await fetch("/request-circuit", {
-//         method: "POST",
-//         body: JSON.stringify({prompt: "a simple circuit with a voltage source and a resistor"}),
-//     });
-//     const data = await response.json();
-//     return data;
-// }
+//ASSUMPTIONS (this is an mvp, suitable only for very simple circuits)
+//there is only one voltage source
+//there is only one level of nesting, i.e. you can either have a resistor in series
+//with the voltage source or two resistors in parallel
 
 const circuit = circuitData;
 
