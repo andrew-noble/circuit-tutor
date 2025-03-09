@@ -16,7 +16,7 @@ import circuitData from "./ex-circ.js";
 
 const circuit = circuitData;
 
-export default function layout(circuit) {
+export default function generateLayout(circuit) {
   console.log("Layout function called with circuit:", circuit);
   const { components, nets, labels } = circuit;
 
@@ -120,8 +120,8 @@ export default function layout(circuit) {
 // but won't interfere with importing this function in other files
 if (typeof window !== "undefined") {
   console.log("Browser environment detected, logging layout result");
-  layout(circuit);
+  generateLayout(circuit);
 } else {
   console.log("Node environment detected, logging layout result");
-  layout(circuit);
+  generateLayout(circuit);
 }
