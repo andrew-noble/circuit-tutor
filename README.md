@@ -16,18 +16,13 @@ A llm-power engineering demonstrator
 │   ├── public/
 │   ├── node_modules/
 │   ├── examples/
+│   │   ├── ex.html
+│   │   └── ex.js
 │   └── src/
-│       ├── utils/
-│       │   └── svg/
-│       │       ├── index.js
-│       │       ├── transforms.js
-│       │       ├── elements.js
-│       │       └── README.md
-│       └── examples/
-│           └── svg-transforms/
-│               ├── index.html
-│               ├── example.js
-│               └── README.md
+│       ├── index.css
+│       ├── App.jsx
+│       ├── main.jsx
+│       └── components/
 │
 ├── backend/
 │   ├── app.py
