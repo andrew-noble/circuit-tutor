@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <defs>
         <!-- Resistor Symbol -->
-        <symbol id="resistor" viewBox="0 0 100 100">
-            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+        <symbol id="resistor" viewBox="-50 -50 100 100">
+            <g transform="translate(-50,-50)" stroke="#000" stroke-width="2">
                 <!-- Left terminal -->
                 <path d="M 0,50 H 20" fill="none" />
                 <!-- Resistor zigzag -->
@@ -14,8 +14,8 @@
         </symbol>
 
         <!-- Voltage Source Symbol -->
-        <symbol id="voltage-source">
-            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+        <symbol id="voltage-source" viewBox="-50 -50 100 100">
+            <g transform="translate(-50,-50)" stroke="#000" stroke-width="2">
                 <!-- Left terminal -->
                 <path d="M 0,50 H 40" fill="none" />
                 <!-- Negative (shorter) vertical line -->
@@ -28,8 +28,8 @@
         </symbol>
 
         <!-- Diode Symbol -->
-        <symbol id="diode" viewBox="0 0 100 100">
-            <g transform="translate(0,0)" stroke="#000" stroke-width="2">
+        <symbol id="diode" viewBox="-50 -50 100 100">
+            <g transform="translate(-50,-50)" stroke="#000" stroke-width="2">
                 <!-- Left terminal -->
                 <path d="M 0,50 H 30" fill="none" />
                 <!-- Triangle -->
