@@ -73,11 +73,11 @@ function renderCircuit(circuitData) {
 
   //create a group for the components, then a group for
   const componentGroups = svg
-    .append("g")
+    .append("g") //group for all symbols
     .classed("components", true)
     .selectAll("use")
     .data(layout)
-    .join("g") //the <use> dom element is fiddly, so bind data to a <g> wrapper instead
+    .join("g") //the <use> dom element is fiddly, so bind data to a <g> wrapper instead to each datapoint
     .classed("component", true)
     .attr(
       "transform",
@@ -85,6 +85,7 @@ function renderCircuit(circuitData) {
         `translate(${xScale(d.position.x) - 50}, ${yScale(d.position.y) - 50})` //50 to move wrt center
     );
 
+  //debug rect, can remove later
   componentGroups
     .append("rect")
     .attr("width", 100)
