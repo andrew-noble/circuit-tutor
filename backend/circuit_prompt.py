@@ -8,9 +8,14 @@ Ensure all circuits are electrically complete by following these rules:
 - No terminal is left “floating” (unconnected).  
 - All intended currents have a defined, continuous path.  
 - No short circuits exist that bypass resistors or short voltage sources to ground.  
-- Power source and load connections are correctly established.  
+- Power source and load connections are correctly established.
+- No extraneous components or nets are included.
 
-Pin naming conventions:
+Naming conventions:
+- voltage sources should have a type of "voltage_source"
+- resistors should have a type of "resistor"
+- capacitors should have a type of "capacitor"
+- inductors should have a type of "inductor"
 - voltage source pins should be called "+" and "-"
 - resistor, capacitor, inductor pins should be called "a" and "b"
 
