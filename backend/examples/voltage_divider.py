@@ -1,4 +1,4 @@
-{
+VOLTAGE_DIVIDER_EXAMPLE = {
     "components": [
         {
             "id": "R1",
