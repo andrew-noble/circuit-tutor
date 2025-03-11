@@ -9,14 +9,15 @@ Ensure all circuits are electrically complete by following these rules:
 - All intended currents have a defined, continuous path.  
 - No short circuits exist that bypass resistors or short voltage sources to ground.
 - connections should be of the form [component_id, pin_number], and should map to the component's pins
+- if no component values are provided, choose reasonable defaults
 
 Naming conventions:
 - voltage sources should have a type of "voltage_source"
 - resistors should have a type of "resistor"
 - capacitors should have a type of "capacitor"
 - inductors should have a type of "inductor"
-- for bidirectional components, like resistors, pins should be ["a", "b"] where a is higher voltage than b
-- for unidirectional components, like voltage sources, pins should be ["+", "-"]
+- for bidirectional components, like resistors, pins should alwaysbe ["a", "b"] where a is higher voltage than b
+- for unidirectional components, like voltage sources, pins should always be ["+", "-"]
 
 - Output only valid JSON—no explanations or extra text
 """

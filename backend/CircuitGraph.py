@@ -1,5 +1,5 @@
 import networkx as nx
-from schema import Circuit, Component, Net
+from schemas.circuit import Circuit, Component, Net
 
 """This implements a simple bipartite graph representation of a circuit
 

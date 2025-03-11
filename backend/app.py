@@ -8,16 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
-from schema import Circuit
+from schemas.circuit import Circuit
 from circuit_prompt import CIRCUIT_SYSTEM_PROMPT
-from generateLayout import generateLayout
 from pydantic import ValidationError
 from fastapi.responses import JSONResponse
+from CircuitGraph import CircuitGraph
 
-# Load environment variables
 load_dotenv()
 
-# Initialize FastAPI app
 app = FastAPI(title="Circuit Visualization API")
 
 # Add CORS middleware
@@ -101,37 +99,22 @@ async def request_circuit(data: dict = Body(...)):
         response_format=Circuit
     )
     
-    circuit_data = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
+    circuit_data_dict = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
+    circuit_data = Circuit(**circuit_data_dict)
     
     # Log the request and response
     log_request_response(
         endpoint="/request-circuit",
         system_prompt=CIRCUIT_SYSTEM_PROMPT,
         user_prompt=user_prompt,
-        response_data=circuit_data
+        response_data=circuit_data_dict
     )
-    
-    # #generate layout, passing python dict in
-    # layout = generateLayout(circuit_data) 
 
-    # print("layout:", layout)
+    # convert to graph
+    circuit_graph = CircuitGraph(circuit_data)
+    circuit_graph.print_adjacency_list()
 
-    # # Validate the layout against the CircuitWithLayout schema
-    # try:
-    #     # This will validate the layout data against the schema
-    #     validated_layout = CircuitWithLayout(**layout)
-    #     # If validation passes, return the original dictionary
-    #     # (FastAPI will convert it to JSON automatically)
-    #     return layout
-    # except ValidationError as e:
-    #     # If validation fails, you can log the error and return it
-    #     print(f"Layout validation error: {e}")
-    #     return JSONResponse(
-    #         status_code=500,
-    #         content={"error": "Layout validation failed", "details": e.errors()}
-    #     )
-
-    return circuit_data
+    return circuit_data_dict
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
