@@ -2873,5 +2873,86 @@
         }
       ]
     }
+  },
+  {
+    "timestamp": "2025-03-11T09:58:52.513853",
+    "endpoint": "/request-circuit",
+    "system_prompt": "\nYou are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. \n\nYou just need to make resistor networks, don't include any other components. \n\nEnsure all circuits are electrically complete by following these rules:\n- Every resistor is properly placed and connected at both ends.  \n- No terminal is left \u201cfloating\u201d (unconnected).  \n- All intended currents have a defined, continuous path.  \n- No short circuits exist that bypass resistors or short voltage sources to ground.\n- connections should be of the form [component_id, pin_number], and should map to the component's pins\n\nNaming conventions:\n- voltage sources should have a type of \"voltage_source\"\n- resistors should have a type of \"resistor\"\n- capacitors should have a type of \"capacitor\"\n- inductors should have a type of \"inductor\"\n- for bidirectional components, like resistors, pins should be [\"a\", \"b\"] where a is higher voltage than b\n- for unidirectional components, like voltage sources, pins should be [\"+\", \"-\"]\n\n- Output only valid JSON\u2014no explanations or extra text\n",
+    "user_prompt": "A simple voltage divider",
+    "response": {
+      "components": [
+        {
+          "id": "V1",
+          "type": "voltage_source",
+          "value": "5V",
+          "pins": [
+            "+",
+            "-"
+          ]
+        },
+        {
+          "id": "R1",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "id": "R2",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "nets": [
+        {
+          "id": "N1",
+          "name": null,
+          "connections": [
+            [
+              "V1",
+              "+"
+            ],
+            [
+              "R1",
+              "a"
+            ]
+          ]
+        },
+        {
+          "id": "N2",
+          "name": null,
+          "connections": [
+            [
+              "R1",
+              "b"
+            ],
+            [
+              "R2",
+              "a"
+            ]
+          ]
+        },
+        {
+          "id": "N3",
+          "name": null,
+          "connections": [
+            [
+              "R2",
+              "b"
+            ],
+            [
+              "V1",
+              "-"
+            ]
+          ]
+        }
+      ]
+    }
   }
 ]

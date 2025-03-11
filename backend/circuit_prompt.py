@@ -15,12 +15,12 @@ Naming conventions:
 - resistors should have a type of "resistor"
 - capacitors should have a type of "capacitor"
 - inductors should have a type of "inductor"
-- components (besides voltage sources) should have pins of [1,2] where 2 is lower voltage
-- voltage sources should have pins of ["+", "-"]
+- for bidirectional components, like resistors, pins should be ["a", "b"] where a is higher voltage than b
+- for unidirectional components, like voltage sources, pins should be ["+", "-"]
 
 - Output only valid JSON—no explanations or extra text
 """
-
+#THE voltage SOURCE +/- is problematic because that field is constrained to integers in the schema!! FIX!!
 
 # - Use standard component types: resistor, capacitor, inductor, voltage_source, current_source, ground
 # (thought): we could probably rearchitect to take a ton of burden off the llm by pre-setting things like pin names, etcS
