@@ -4,13 +4,10 @@ class Component(BaseModel):
     id: str
     type: str  # e.g., "resistor", "capacitor"
     name: str  # e.g., "R1", "C1"
-    pins: list[str]  # Just a list of pin names like ["Vin", "GND"]
-    # conventionally, reversible components have pins a, b
-    # voltage sources and current sources have + and -
-    
+    pins: list[str]  # list of pin names like ["Vin", "GND"]
 
 class Connection(BaseModel):
-    component: str
+    component_id: str
     pin: str
 
 class Net(BaseModel):
@@ -39,10 +36,17 @@ class NetPosition(BaseModel):
     x: int
     y: int
 
-class ComponentWithPosition(Component):
+class ComponentWithPosition(BaseModel):
+    id: str
+    type: str
+    name: str
+    pins: list[str]
     position: ComponentPosition
 
-class NetWithPosition(Net):
+class NetWithPosition(BaseModel):
+    id: str
+    name: str
+    connections: list[Connection]
     position: NetPosition
 
 class CircuitWithLayout(BaseModel):
