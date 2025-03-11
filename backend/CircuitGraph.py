@@ -1,5 +1,4 @@
 import networkx as nx
-from schemas.circuit import Circuit, Component, Net
 
 """This implements a simple bipartite graph representation of a circuit
 
@@ -13,7 +12,7 @@ represent components, this would not be possible.
 """
 
 class CircuitGraph():
-    def __init__(self, circuit : Circuit):
+    def __init__(self, circuit : dict):
         self.graph = nx.Graph()
         self.circuit = circuit
         self._build_graph()
@@ -21,25 +20,38 @@ class CircuitGraph():
     def _build_graph(self) -> None:
         """Builds a bipartite graph from the passed circuit definition"""
         # Add component nodes
-        for component in self.circuit.components:
-            self.graph.add_node(component.id, type='component', data=component)
+        for component in self.circuit["components"]:
+            self.graph.add_node(component["id"], type='component', data=component)
         
         # Add net nodes and edges
-        for net in self.circuit.nets:
-            self.graph.add_node(net.id, type='net', data=net)
+        for net in self.circuit["nets"]:
+            self.graph.add_node(net["id"], type='net', data=net)
             # Add edges between nets and components
-            for component_id, pin in net.connections:
-                self.graph.add_edge(net.id, component_id, pin=pin)
+            for component_id, pin in net["connections"]:
+                self.graph.add_edge(net["id"], component_id, pin=pin)
 
-    def add_component(self, component: Component) -> None:
+    def add_component(self, component: dict) -> None:
         """Add a new component to the graph"""
         self.graph.add_node(component.id, type='component', data=component)
 
-    def add_net(self, net: Net) -> None:
+    def add_net(self, net: dict) -> None:
         """Add a new net to the graph"""
         self.graph.add_node(net.id, type='net', data=net)
         for component_id, pin in net.connections:
             self.graph.add_edge(net.id, component_id, pin=pin) #nets definitionally need an edge. 
+
+    #returns a dictionary of the component data
+    def get_component(self, component_id: str) -> dict:
+        """Get a component from the graph by id"""
+        return self.graph.nodes[component_id]['data']
+
+    def get_components(self) -> list[dict]:
+        """Get all components in the graph"""
+        return [self.graph.nodes[node]['data'] for node in self.graph.nodes() if self.graph.nodes[node]['type'] == 'component']
+
+    def get_nets(self) -> list[dict]:
+        """Get all nets in the graph"""
+        return [self.graph.nodes[node]['data'] for node in self.graph.nodes() if self.graph.nodes[node]['type'] == 'net']
 
     def print_adjacency_list(self) -> None:
         """Print adjacency list for debugging"""
