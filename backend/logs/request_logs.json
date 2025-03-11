@@ -2518,5 +2518,360 @@
         }
       ]
     }
+  },
+  {
+    "timestamp": "2025-03-11T08:19:09.299210",
+    "endpoint": "/request-circuit",
+    "system_prompt": "\nYou are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. \n\nYou just need to make resistor networks, don't include any other components. \n\nEnsure all circuits are electrically complete by following these rules:\n- Every resistor is properly placed and connected at both ends.  \n- No terminal is left \u201cfloating\u201d (unconnected).  \n- All intended currents have a defined, continuous path.  \n- No short circuits exist that bypass resistors or short voltage sources to ground.  \n- Power source and load connections are correctly established.\n- No extraneous components or nets are included.\n\nNaming conventions:\n- voltage sources should have a type of \"voltage_source\"\n- resistors should have a type of \"resistor\"\n- capacitors should have a type of \"capacitor\"\n- inductors should have a type of \"inductor\"\n- voltage source pins should be called \"+\" and \"-\"\n- resistor, capacitor, inductor pins should be called \"a\" and \"b\"\n\n- Output only valid JSON\u2014no explanations or extra text\n",
+    "user_prompt": "A simple voltage divider",
+    "response": {
+      "components": [
+        {
+          "id": "V1",
+          "type": "voltage_source",
+          "value": "5V",
+          "pins": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "R1",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            2,
+            3
+          ]
+        },
+        {
+          "id": "R2",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            3,
+            4
+          ]
+        }
+      ],
+      "nets": [
+        {
+          "id": "net1",
+          "name": null,
+          "connections": [
+            {
+              "connection": [
+                [
+                  "+",
+                  "V1"
+                ],
+                [
+                  "1",
+                  "V1"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "net2",
+          "name": null,
+          "connections": [
+            {
+              "connection": [
+                [
+                  "-",
+                  "V1"
+                ],
+                [
+                  "2",
+                  "V1"
+                ],
+                [
+                  "a",
+                  "R1"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "net3",
+          "name": null,
+          "connections": [
+            {
+              "connection": [
+                [
+                  "b",
+                  "R1"
+                ],
+                [
+                  "a",
+                  "R2"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "net4",
+          "name": null,
+          "connections": [
+            {
+              "connection": [
+                [
+                  "b",
+                  "R2"
+                ],
+                [
+                  "4",
+                  "R2"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-03-11T08:24:13.829469",
+    "endpoint": "/request-circuit",
+    "system_prompt": "\nYou are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. \n\nYou just need to make resistor networks, don't include any other components. \n\nEnsure all circuits are electrically complete by following these rules:\n- Every resistor is properly placed and connected at both ends.  \n- No terminal is left \u201cfloating\u201d (unconnected).  \n- All intended currents have a defined, continuous path.  \n- No short circuits exist that bypass resistors or short voltage sources to ground.  \n- Power source and load connections are correctly established.\n- No extraneous components or nets are included.\n\nNaming conventions:\n- voltage sources should have a type of \"voltage_source\"\n- resistors should have a type of \"resistor\"\n- capacitors should have a type of \"capacitor\"\n- inductors should have a type of \"inductor\"\n- voltage source pins should be called \"+\" and \"-\"\n- resistor, capacitor, inductor pins should be called \"a\" and \"b\"\n\n- Output only valid JSON\u2014no explanations or extra text\n",
+    "user_prompt": "A simple voltage divider",
+    "response": {
+      "components": [
+        {
+          "id": "V1",
+          "type": "voltage_source",
+          "value": "5V",
+          "pins": [
+            1,
+            0
+          ]
+        },
+        {
+          "id": "R1",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "R2",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            2,
+            0
+          ]
+        }
+      ],
+      "nets": [
+        {
+          "id": "net1",
+          "name": null,
+          "connections": [
+            [
+              "V1",
+              "+"
+            ],
+            [
+              "R1",
+              "a"
+            ]
+          ]
+        },
+        {
+          "id": "net2",
+          "name": null,
+          "connections": [
+            [
+              "R1",
+              "b"
+            ],
+            [
+              "R2",
+              "a"
+            ]
+          ]
+        },
+        {
+          "id": "net3",
+          "name": null,
+          "connections": [
+            [
+              "V1",
+              "-"
+            ],
+            [
+              "R2",
+              "b"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-03-11T08:27:39.369605",
+    "endpoint": "/request-circuit",
+    "system_prompt": "\nYou are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. \n\nYou just need to make resistor networks, don't include any other components. \n\nEnsure all circuits are electrically complete by following these rules:\n- Every resistor is properly placed and connected at both ends.  \n- No terminal is left \u201cfloating\u201d (unconnected).  \n- All intended currents have a defined, continuous path.  \n- No short circuits exist that bypass resistors or short voltage sources to ground.\n- connections should be of the form [component_id, pin_number], and should map to the component's pins\n\nNaming conventions:\n- voltage sources should have a type of \"voltage_source\"\n- resistors should have a type of \"resistor\"\n- capacitors should have a type of \"capacitor\"\n- inductors should have a type of \"inductor\"\n- components should have pins of [1,2] where 2 is lower voltage\n\n- Output only valid JSON\u2014no explanations or extra text\n",
+    "user_prompt": "A simple voltage divider",
+    "response": {
+      "components": [
+        {
+          "id": "V1",
+          "type": "voltage_source",
+          "value": "10V",
+          "pins": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "R1",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "R2",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            1,
+            2
+          ]
+        }
+      ],
+      "nets": [
+        {
+          "id": "net1",
+          "name": "vin",
+          "connections": [
+            [
+              "V1",
+              "1"
+            ],
+            [
+              "R1",
+              "1"
+            ]
+          ]
+        },
+        {
+          "id": "net2",
+          "name": "vout",
+          "connections": [
+            [
+              "R1",
+              "2"
+            ],
+            [
+              "R2",
+              "1"
+            ]
+          ]
+        },
+        {
+          "id": "net3",
+          "name": "gnd",
+          "connections": [
+            [
+              "V1",
+              "2"
+            ],
+            [
+              "R2",
+              "2"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-03-11T08:28:59.515412",
+    "endpoint": "/request-circuit",
+    "system_prompt": "\nYou are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. \n\nYou just need to make resistor networks, don't include any other components. \n\nEnsure all circuits are electrically complete by following these rules:\n- Every resistor is properly placed and connected at both ends.  \n- No terminal is left \u201cfloating\u201d (unconnected).  \n- All intended currents have a defined, continuous path.  \n- No short circuits exist that bypass resistors or short voltage sources to ground.\n- connections should be of the form [component_id, pin_number], and should map to the component's pins\n\nNaming conventions:\n- voltage sources should have a type of \"voltage_source\"\n- resistors should have a type of \"resistor\"\n- capacitors should have a type of \"capacitor\"\n- inductors should have a type of \"inductor\"\n- components (besides voltage sources) should have pins of [1,2] where 2 is lower voltage\n- voltage sources should have pins of [\"+\", \"-\"]\n\n- Output only valid JSON\u2014no explanations or extra text\n",
+    "user_prompt": "A simple voltage divider",
+    "response": {
+      "components": [
+        {
+          "id": "V1",
+          "type": "voltage_source",
+          "value": "5V",
+          "pins": []
+        },
+        {
+          "id": "R1",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "R2",
+          "type": "resistor",
+          "value": "1k",
+          "pins": [
+            1,
+            2
+          ]
+        }
+      ],
+      "nets": [
+        {
+          "id": "net1",
+          "name": "V+",
+          "connections": [
+            [
+              "V1",
+              "+"
+            ],
+            [
+              "R1",
+              "1"
+            ]
+          ]
+        },
+        {
+          "id": "net2",
+          "name": "Vout",
+          "connections": [
+            [
+              "R1",
+              "2"
+            ],
+            [
+              "R2",
+              "1"
+            ]
+          ]
+        },
+        {
+          "id": "net3",
+          "name": "Ground",
+          "connections": [
+            [
+              "V1",
+              "-"
+            ],
+            [
+              "R2",
+              "2"
+            ]
+          ]
+        }
+      ]
+    }
   }
 ]
