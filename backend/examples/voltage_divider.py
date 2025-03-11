@@ -21,7 +21,7 @@ VOLTAGE_DIVIDER_EXAMPLE = {
     ],
     "nets": [
         {
-            "id": "net1",
+            "id": "N1",
             "name": None,
             "connections": [
                 ["V1", "+"],
@@ -29,7 +29,7 @@ VOLTAGE_DIVIDER_EXAMPLE = {
             ]
         },
         {
-            "id": "net2",
+            "id": "N2",
             "name": None,
             "connections": [
                 ["R1", "b"],
@@ -37,7 +37,7 @@ VOLTAGE_DIVIDER_EXAMPLE = {
             ]
         },
         {
-            "id": "net3",
+            "id": "N3",
             "name": None,
             "connections": [
                 ["R2", "b"],
