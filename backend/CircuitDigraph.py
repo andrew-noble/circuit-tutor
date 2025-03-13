@@ -11,9 +11,9 @@ This arrangement allows for future extensions like multi-terminal components
 represent components, this would not be possible.
 """
 
-class CircuitGraph():
+class CircuitDigraph():
     def __init__(self, circuit : dict):
-        self.graph = nx.Graph()
+        self.graph = nx.DiGraph()
         self.circuit = circuit
         self._build_graph()
 
@@ -28,7 +28,11 @@ class CircuitGraph():
             self.graph.add_node(net["id"], type='net', data=net)
             # Add edges between nets and components
             for component_id, pin in net["connections"]:
-                self.graph.add_edge(net["id"], component_id, pin=pin)
+                #assign proper directionality. We rely on pin names here
+                if pin == "-" or pin == "a": 
+                    self.graph.add_edge(net["id"], component_id, pin=pin)
+                else:
+                    self.graph.add_edge(component_id, net["id"], pin=pin)
 
     def add_component(self, component: dict) -> None:
         """Add a new component to the graph"""
