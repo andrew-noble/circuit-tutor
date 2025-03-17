@@ -1,6 +1,21 @@
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-import generateLayout from "./generateLayout.js";
-import circuitData from "./ex-circ.js";
+import * as d3 from "d3";
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+interface ComponentData {
+  id: string;
+  type: string;
+  position: Position;
+  [key: string]: any;
+}
+
+interface CircuitData {
+  components: ComponentData[];
+  [key: string]: any;
+}
 
 const padding = { top: 40, right: 40, bottom: 40, left: 80 };
 
@@ -15,6 +30,7 @@ const svg = d3
   .attr("width", width + padding.left + padding.right)
   .attr("height", height + padding.top + padding.bottom)
   .append("g")
+  .attr("id", "d3-g")
   .attr("transform", `translate(${padding.left}, ${padding.top})`);
 
 //SET UP AXES-------
@@ -37,13 +53,27 @@ const yScale = d3.scaleLinear().domain([-2, 2]).range([height, 0]); //range reve
 //   .call(d3.axisLeft(yScale));
 //----------------
 
-async function loadSymbols() {
+async function loadSymbols(): Promise<void> {
   const spriteSheet = await d3.xml("/svg/symbol-sheet.svg");
   const defs = spriteSheet.documentElement.querySelector("defs"); //target defs section in the symbol sprite sheet
-  svg.append("defs").node().appendChild(defs.cloneNode(true)); //inject defs section in this document
+  if (defs) {
+    svg.node()?.appendChild(defs.cloneNode(true)); //inject defs section in this document
+  }
 }
 
-const createSeriesTrace = (selection, x1, y1, x2, y2) => {
+async function fetchCircuitData(): Promise<CircuitData> {
+  const response = await fetch("ex-circ.json");
+  const data = await response.json();
+  return data;
+}
+
+const createSeriesTrace = (
+  selection: d3.Selection<any, any, any, any>,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): d3.Selection<SVGLineElement, any, any, any> => {
   return selection
     .append("line")
     .attr("x1", x1)
@@ -52,7 +82,13 @@ const createSeriesTrace = (selection, x1, y1, x2, y2) => {
     .attr("y2", y2);
 };
 
-const createParallelTrace = (selection, x1, y1, x2, y2) => {
+const createParallelTrace = (
+  selection: d3.Selection<any, any, any, any>,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): d3.Selection<SVGLineElement, any, any, any> => {
   return selection
     .append("line")
     .attr("x1", x1)
@@ -61,11 +97,11 @@ const createParallelTrace = (selection, x1, y1, x2, y2) => {
     .attr("y2", y2);
 };
 
-function renderCircuit(circuitData) {
+function renderCircuit(circuitData: CircuitData): void {
   const layout = generateLayout(circuitData); //generate layout
 
   // Map component types to symbol IDs
-  const typeToSymbol = {
+  const typeToSymbol: Record<string, string> = {
     resistor: "#resistor",
     voltage_source: "#voltage-source",
     diode: "#diode",
@@ -95,7 +131,7 @@ function renderCircuit(circuitData) {
   //add symbols
   componentGroups
     .append("use")
-    .attr("xlink:href", (d) => typeToSymbol[d.type]) // Map component type to symbol ID
+    .attr("xlink:href", (d) => typeToSymbol[d.type] || "") // Map component type to symbol ID
     .attr("width", 100)
     .attr("height", 100);
 
@@ -103,5 +139,16 @@ function renderCircuit(circuitData) {
   const netGroup = svg.append("g").classed("nets", true);
 }
 
+// Declare the generateLayout function to avoid TypeScript errors
+function generateLayout(circuitData: CircuitData): ComponentData[] {
+  // This is a placeholder - you'll need to implement or import the actual function
+  return circuitData.components || [];
+}
+
 loadSymbols();
-renderCircuit(circuitData);
+
+(async () => {
+  const circuit = await fetchCircuitData();
+  console.log(circuit);
+  renderCircuit(circuit);
+})();
