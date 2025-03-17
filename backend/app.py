@@ -12,8 +12,8 @@ from schemas.circuit import Circuit
 from circuit_prompt import CIRCUIT_SYSTEM_PROMPT
 from pydantic import ValidationError
 from fastapi.responses import JSONResponse
-from CircuitGraph import CircuitGraph
-
+from CircuitDigraph import CircuitDigraph
+from generate_layout import generate_layout
 load_dotenv()
 
 app = FastAPI(title="Circuit Visualization API")
@@ -100,7 +100,6 @@ async def request_circuit(data: dict = Body(...)):
     )
     
     circuit_data_dict = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
-    circuit_data = Circuit(**circuit_data_dict)
     
     # Log the request and response
     log_request_response(
@@ -111,10 +110,10 @@ async def request_circuit(data: dict = Body(...)):
     )
 
     # convert to graph
-    circuit_graph = CircuitGraph(circuit_data)
-    circuit_graph.print_adjacency_list()
+    circuit_graph = CircuitDigraph(circuit_data_dict)
+    layout = generate_layout(circuit_graph)
 
-    return circuit_data_dict
+    return layout
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
