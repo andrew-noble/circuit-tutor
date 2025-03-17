@@ -8,13 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
-from schema import Circuit
+from schemas.circuit import Circuit
 from circuit_prompt import CIRCUIT_SYSTEM_PROMPT
-
-# Load environment variables
+from pydantic import ValidationError
+from fastapi.responses import JSONResponse
+from CircuitDigraph import CircuitDigraph
+from generate_layout import generate_layout
 load_dotenv()
 
-# Initialize FastAPI app
 app = FastAPI(title="Circuit Visualization API")
 
 # Add CORS middleware
@@ -59,10 +60,6 @@ def log_request_response(endpoint, system_prompt, user_prompt, response_data):
     with open(log_file, 'w') as f:
         json.dump(logs, f, indent=2)
 
-#simple schema
-class LlmResponse(BaseModel):
-    data: str
-
 # Initialize OpenAI client
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -77,7 +74,7 @@ async def request_llm(data: dict = Body(...)):
     response = await client.beta.chat.completions.parse(
         model=MODEL,
         messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": user_prompt}],
-        response_format=LlmResponse
+        response_format=Circuit
     )
     
     response_content = response.choices[0].message.content
@@ -102,17 +99,21 @@ async def request_circuit(data: dict = Body(...)):
         response_format=Circuit
     )
     
-    circuit_data = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
+    circuit_data_dict = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
     
     # Log the request and response
     log_request_response(
         endpoint="/request-circuit",
         system_prompt=CIRCUIT_SYSTEM_PROMPT,
         user_prompt=user_prompt,
-        response_data=circuit_data
+        response_data=circuit_data_dict
     )
-    
-    return circuit_data #python dict -> json (done by fastAPI automatically)
+
+    # convert to graph
+    circuit_graph = CircuitDigraph(circuit_data_dict)
+    layout = generate_layout(circuit_graph)
+
+    return layout
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":

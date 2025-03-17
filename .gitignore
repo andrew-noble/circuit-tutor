@@ -1,7 +1,7 @@
 backend/venv
 backend/build
-backend/__pycache__
 **/__pycache__
+**/logs/
 
 # React frontend
 node_modules
