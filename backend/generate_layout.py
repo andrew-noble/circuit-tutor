@@ -45,13 +45,13 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
     components = []
     nets = []
     
+    ##fix this fugly shit. This shouldn't be generate_layout's responsibility. 
     for node in layout:
         x, y = node["position"]
         if "type" in node:  # This is a component
             components.append({
                 "id": node["id"],
                 "type": node["type"],
-                "name": node.get("name", None),  # Optional name field
                 "value": node.get("value", ""),  # Required value field
                 "pins": node["pins"],
                 "position": {
@@ -63,7 +63,6 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
         else:  # This is a net
             nets.append({
                 "id": node["id"],
-                "name": node.get("name", None),  # Optional name field
                 "connections": [[str(c), str(p)] for c, p in node["connections"]],  # Ensure string types
                 "position": {
                     "x": int(x),

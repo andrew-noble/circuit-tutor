@@ -32,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-MODEL = "gpt-4o"
+MODEL = "o3-mini"
 
 # Simple logging function
 def log_request_response(endpoint, system_prompt, user_prompt, response_data):

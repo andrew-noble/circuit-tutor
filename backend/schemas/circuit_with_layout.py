@@ -15,14 +15,12 @@ class NetPosition(BaseModel):
 class ComponentWithPosition(BaseModel):
     id: str  # e.g. "r1, c1"
     type: str  # e.g., "resistor", "capacitor"
-    name: Optional[str]  # Optional: human-readable name like "battery"
     value: str
     pins: list[str]
     position: ComponentPosition
 
 class NetWithPosition(BaseModel):
     id: str
-    name: Optional[str]  # Optional: human-readable name like "VCC"
     connections: list[list[str, str]]  # list of [component_id, pin] pairs
     position: NetPosition
 
