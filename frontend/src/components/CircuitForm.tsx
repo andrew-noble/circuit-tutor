@@ -16,7 +16,7 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/request-circuit", {
+      const response = await fetch("http://localhost:8000/generate-circuit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
