@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { CircuitData } from "../types";
-import { CircuitRenderer, config } from "./CircuitRenderer";
+import { CircuitRenderer, config } from "../services/CircuitRenderer";
 
 interface CircuitVisualizationProps {
   width?: number;
@@ -19,48 +19,49 @@ const CircuitVisualization: React.FC<CircuitVisualizationProps> = ({
 
   useEffect(() => {
     const loadSymbols = async () => {
+      if (!svgRef.current) return;
+
       const spriteSheet = await d3.xml("/svg/symbol-sheet.svg");
       const defs = spriteSheet.documentElement.querySelector("defs");
-      if (defs && svgRef.current) {
+      if (defs) {
         svgRef.current.appendChild(defs.cloneNode(true));
       }
     };
 
-    // Initialize the renderer
     const initializeRenderer = async () => {
+      if (!svgRef.current) return;
+
       await loadSymbols();
+      rendererRef.current = new CircuitRenderer(svgRef.current);
 
-      // Clear any existing content
-      if (svgRef.current) {
-        d3.select(svgRef.current).selectAll("*").remove();
+      if (circuitData) {
+        rendererRef.current.render(circuitData);
       }
-
-      // Create new renderer
-      rendererRef.current = new CircuitRenderer();
     };
 
     initializeRenderer();
 
-    // Cleanup function
     return () => {
       if (svgRef.current) {
         d3.select(svgRef.current).selectAll("*").remove();
       }
     };
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
-  // Effect for rendering circuit data
   useEffect(() => {
     if (circuitData && rendererRef.current) {
       rendererRef.current.render(circuitData);
     }
-  }, [circuitData]); // Re-render when circuitData changes
+  }, [circuitData]);
 
   return (
     <div className="circuit-visualization" style={{ width, height }}>
       <svg
         ref={svgRef}
-        id="d3-svg"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
         style={{
           width: "100%",
           height: "100%",

@@ -21,14 +21,14 @@ export const config = {
 };
 
 export class CircuitRenderer {
-  private svg: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  private svg: d3.Selection<SVGGElement, unknown, null, undefined>;
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
 
-  constructor() {
+  constructor(svgElement: SVGSVGElement) {
     const { width, height } = this.calculateDimensions();
 
-    this.svg = this.initializeSVG(width, height);
+    this.svg = this.initializeSVG(svgElement, width, height);
     this.xScale = this.createXScale(width);
     this.yScale = this.createYScale(height);
   }
@@ -41,9 +41,13 @@ export class CircuitRenderer {
     return { width, height };
   }
 
-  private initializeSVG(width: number, height: number) {
+  private initializeSVG(
+    svgElement: SVGSVGElement,
+    width: number,
+    height: number
+  ) {
     return d3
-      .select("#d3-svg")
+      .select(svgElement)
       .attr("width", width + config.padding.left + config.padding.right)
       .attr("height", height + config.padding.top + config.padding.bottom)
       .append("g")
@@ -108,7 +112,7 @@ export class CircuitRenderer {
 
   private renderComponents(circuitData: CircuitData) {
     const componentGroups = this.svg
-      .append("g")
+      .append("g") //overall group for all circuitcomponent svgs
       .classed("components", true)
       .selectAll<SVGGElement, ComponentData>("g")
       .data(circuitData.components)
@@ -116,11 +120,12 @@ export class CircuitRenderer {
       .classed("component", true)
       .attr(
         "transform",
-        (d: ComponentData) =>
+        (d) =>
           `translate(${this.xScale(d.position.x) - config.componentSize / 2}, 
                     ${this.yScale(d.position.y) - config.componentSize / 2})`
       );
 
+    // Add the symbol references with proper scaling
     componentGroups
       .append("use")
       .attr(
@@ -131,7 +136,25 @@ export class CircuitRenderer {
       .attr("width", config.componentSize)
       .attr("height", config.componentSize);
 
-    return componentGroups;
+    // Add debug rectangles
+    componentGroups
+      .append("rect")
+      .attr("width", config.componentSize)
+      .attr("height", config.componentSize)
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-dasharray", "2,2");
+
+    // // Add debug text to show component type and symbol being used
+    // componentGroups
+    //   .append("text")
+    //   .attr("y", -config.componentSize / 2 - 5)
+    //   .attr("text-anchor", "middle")
+    //   .text((d: ComponentData) => {
+    //     const symbolId =
+    //       config.symbolMap[d.type as keyof typeof config.symbolMap] || "";
+    //     return `${d.type} (${symbolId})`;
+    //   });
   }
 
   private createConnectionPath(
