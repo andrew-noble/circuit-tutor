@@ -14,7 +14,12 @@ from pydantic import ValidationError
 from fastapi.responses import JSONResponse
 from CircuitDigraph import CircuitDigraph
 from generate_layout import generate_layout
+from schemas.circuit_with_layout import CircuitWithLayout
 load_dotenv()
+
+# Pydantic models for request validation
+class CircuitRequest(BaseModel):
+    prompt: str
 
 app = FastAPI(title="Circuit Visualization API")
 
@@ -68,12 +73,10 @@ async def test():
     return {"message": "Hello, World!"}
 
 @app.post("/request-llm")
-async def request_llm(data: dict = Body(...)):
-    user_prompt = data["prompt"]
-    
+async def request_llm(data: CircuitRequest):
     response = await client.beta.chat.completions.parse(
         model=MODEL,
-        messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": user_prompt}],
+        messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": data.prompt}],
         response_format=Circuit
     )
     
@@ -83,37 +86,42 @@ async def request_llm(data: dict = Body(...)):
     log_request_response(
         endpoint="/request-llm",
         system_prompt=CIRCUIT_SYSTEM_PROMPT,
-        user_prompt=user_prompt,
+        user_prompt=data.prompt,
         response_data=response_content
     )
     
     return {"message": response_content}
 
-@app.post("/request-circuit")
-async def request_circuit(data: dict = Body(...)):
-    user_prompt = data["prompt"]
-    
-    response = await client.beta.chat.completions.parse(
-        model=MODEL,
-        messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": user_prompt}],
-        response_format=Circuit
-    )
-    
-    circuit_data_dict = json.loads(response.choices[0].message.content) #json received from openAI -> python dict
-    
-    # Log the request and response
-    log_request_response(
-        endpoint="/request-circuit",
-        system_prompt=CIRCUIT_SYSTEM_PROMPT,
-        user_prompt=user_prompt,
-        response_data=circuit_data_dict
-    )
+@app.post("/request-circuit", response_model=CircuitWithLayout)
+async def request_circuit(data: CircuitRequest):
+    try:
+        response = await client.beta.chat.completions.parse(
+            model=MODEL,
+            messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": data.prompt}],
+            response_format=Circuit
+        )
+        
+        circuit_data_dict = json.loads(response.choices[0].message.content)
+        
+        # Log the request and response
+        log_request_response(
+            endpoint="/request-circuit",
+            system_prompt=CIRCUIT_SYSTEM_PROMPT,
+            user_prompt=data.prompt,
+            response_data=circuit_data_dict
+        )
 
-    # convert to graph
-    circuit_graph = CircuitDigraph(circuit_data_dict)
-    layout = generate_layout(circuit_graph)
-
-    return layout
+        # Convert to graph and generate layout
+        circuit_graph = CircuitDigraph(circuit_data_dict)
+        layout = generate_layout(circuit_graph)
+        
+        # Validate response using Pydantic
+        return CircuitWithLayout(**layout)
+        
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":

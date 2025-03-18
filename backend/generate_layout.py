@@ -1,16 +1,8 @@
 import networkx as nx
-import math
 from CircuitDigraph import CircuitDigraph
 from collections import deque
-from schemas.circuit_with_layout import (
-    CircuitWithLayout,
-    ComponentPosition,
-    NetPosition,
-    ComponentWithPosition,
-    NetWithPosition
-)
 
-def generate_layout(circuit: CircuitDigraph) -> CircuitWithLayout:
+def generate_layout(circuit: CircuitDigraph) -> dict:
     layout = []
     visited = set()
     queue = deque([("V1", 0)])  # Store node and y-position
@@ -49,27 +41,30 @@ def generate_layout(circuit: CircuitDigraph) -> CircuitWithLayout:
                     
                     queue.append((neighbor, neighbor_y))
     
-    # Transform layout into CircuitWithLayout format
+    # Transform layout into a dictionary structure
     components = []
     nets = []
     
     for node in layout:
         x, y = node["position"]
         if "type" in node:  # This is a component
-            components.append(ComponentWithPosition(
-                id=node["id"],
-                type=node["type"],
-                name=node.get("value", ""),
-                pins=node["pins"],
-                position=ComponentPosition(x=x, y=y)
-            ))
+            components.append({
+                "id": node["id"],
+                "type": node["type"],
+                "name": node.get("value", ""),
+                "pins": node["pins"],
+                "position": {"x": x, "y": y}
+            })
         else:  # This is a net
-            nets.append(NetWithPosition(
-                id=node["id"],
-                name=node.get("name", f"Net {node['id']}"),
-                connections=node["connections"],
-                position=NetPosition(x=x, y=y)
-            ))
+            nets.append({
+                "id": node["id"],
+                "name": node.get("name", f"Net {node['id']}"),
+                "connections": node["connections"],
+                "position": {"x": x, "y": y}
+            })
     
-    #note: this function guarantees sequential ordering of components and nets due to the bfs tranversal
-    return CircuitWithLayout(components=components, nets=nets)
+    # Note: this function guarantees sequential ordering of components and nets due to the bfs traversal
+    return {
+        "components": components,
+        "nets": nets
+    }
