@@ -2,8 +2,15 @@ import networkx as nx
 import math
 from CircuitDigraph import CircuitDigraph
 from collections import deque
+from schemas.circuit_with_layout import (
+    CircuitWithLayout,
+    ComponentPosition,
+    NetPosition,
+    ComponentWithPosition,
+    NetWithPosition
+)
 
-def generate_layout(circuit: CircuitDigraph) -> dict:
+def generate_layout(circuit: CircuitDigraph) -> CircuitWithLayout:
     layout = []
     visited = set()
     queue = deque([("V1", 0)])  # Store node and y-position
@@ -18,10 +25,11 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
             continue
             
         visited.add(current_node)
-        x_pos = level_map.get(current_node, current_level) #returns current_level if no curNode
+        x_pos = level_map.get(current_node, current_level)
         
         # Add current node to layout
-        layout.append({**circuit.graph.nodes[current_node]["data"], "position": (x_pos, int(y_pos))})
+        node_data = circuit.graph.nodes[current_node]["data"]
+        layout.append({**node_data, "position": (x_pos, int(y_pos))})
         
         # Process neighbors
         neighbors = list(circuit.graph.neighbors(current_node))
@@ -36,10 +44,31 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
                     neighbor_y = start_y + i * spacing
                     
                     # Set the neighbor's level (x-coordinate)
-                    # All neighbors of the same node share the same x-coordinate
                     next_level = x_pos + 1
                     level_map[neighbor] = next_level
                     
                     queue.append((neighbor, neighbor_y))
     
-    return layout
+    # Transform layout into CircuitWithLayout format
+    components = []
+    nets = []
+    
+    for node in layout:
+        x, y = node["position"]
+        if "type" in node:  # This is a component
+            components.append(ComponentWithPosition(
+                id=node["id"],
+                type=node["type"],
+                name=node.get("value", ""),
+                pins=node["pins"],
+                position=ComponentPosition(x=x, y=y)
+            ))
+        else:  # This is a net
+            nets.append(NetWithPosition(
+                id=node["id"],
+                name=node.get("name", f"Net {node['id']}"),
+                connections=node["connections"],
+                position=NetPosition(x=x, y=y)
+            ))
+    
+    return CircuitWithLayout(components=components, nets=nets)
