@@ -12,11 +12,7 @@ export const config = {
   } as const,
   dimensions: {
     width: 1000,
-    height: 400,
-  },
-  scales: {
-    x: { min: 0, max: 8 },
-    y: { min: -2, max: 2 },
+    height: 600,
   },
 };
 
@@ -59,17 +55,17 @@ export class CircuitRenderer {
   }
 
   private createXScale(width: number) {
-    return d3
-      .scaleLinear()
-      .domain([config.scales.x.min, config.scales.x.max])
-      .range([0, width]);
-  }
+    return d3.scaleLinear().domain([0, 8]).range([0, width]); //sensible default range bc we don't have circuit data yet
+  } //note domain is the circuit units, range is svg pixel units that circuit units are mapped to
 
   private createYScale(height: number) {
-    return d3
-      .scaleLinear()
-      .domain([config.scales.y.min, config.scales.y.max])
-      .range([height, 0]);
+    return d3.scaleLinear().domain([-4, 4]).range([height, 0]);
+  }
+
+  private updateScalesToCircuit(circuitData: CircuitData) {
+    const bounds = this.calculateCircuitBounds(circuitData);
+    this.xScale.domain([bounds.x.min, bounds.x.max]);
+    this.yScale.domain([bounds.y.min, bounds.y.max]);
   }
 
   private getComponentConnectionPoint(
@@ -100,12 +96,25 @@ export class CircuitRenderer {
   private createFinishPathData(
     start: Position,
     end: Position,
-    yOffset: number = 100
+    circuitData: CircuitData
   ): string {
+    // Find the lowest component in circuit coordinates
+    const lowestComponentY = Math.min(
+      ...circuitData.components.map((c) => c.position.y)
+    );
+
+    // Convert to pixel coordinates and add pixel offset
+    const pixelOffset = 50; // pixels below the lowest component
+    const lowestPixelY =
+      this.yScale(lowestComponentY) + config.componentSize / 2 + pixelOffset;
+
+    // Calculate the vertical distance the path needs to travel
+    const pathYOffset = lowestPixelY - start.y;
+
     return `M ${start.x} ${start.y} 
             L ${start.x + 50} ${start.y} 
-            L ${start.x + 50} ${start.y + yOffset} 
-            L ${end.x - 50} ${start.y + yOffset}
+            L ${start.x + 50} ${start.y + pathYOffset} 
+            L ${end.x - 50} ${start.y + pathYOffset}
             L ${end.x - 50} ${end.y}
             L ${end.x} ${end.y}`.replace(/\s+/g, " ");
   }
@@ -137,13 +146,13 @@ export class CircuitRenderer {
       .attr("height", config.componentSize);
 
     // Add debug rectangles
-    componentGroups
-      .append("rect")
-      .attr("width", config.componentSize)
-      .attr("height", config.componentSize)
-      .attr("fill", "none")
-      .attr("stroke", "red")
-      .attr("stroke-dasharray", "2,2");
+    // componentGroups
+    //   .append("rect")
+    //   .attr("width", config.componentSize)
+    //   .attr("height", config.componentSize)
+    //   .attr("fill", "none")
+    //   .attr("stroke", "red")
+    //   .attr("stroke-dasharray", "2,2");
 
     // // Add debug text to show component type and symbol being used
     // componentGroups
@@ -163,7 +172,7 @@ export class CircuitRenderer {
     circuitData: CircuitData,
     connection: [string, string]
   ): string {
-    const [componentId, pinId] = connection;
+    const [componentId, _pinId] = connection;
     const component = circuitData.components.find(
       (c: ComponentData) => c.id === componentId
     );
@@ -189,7 +198,7 @@ export class CircuitRenderer {
         y: v1Y,
       };
 
-      return this.createFinishPathData(netPos, v1LeftPoint);
+      return this.createFinishPathData(netPos, v1LeftPoint, circuitData);
     }
 
     return isSource
@@ -227,7 +236,30 @@ export class CircuitRenderer {
     return netGroups;
   }
 
+  private calculateCircuitBounds(circuitData: CircuitData) {
+    const allPositions = [
+      ...circuitData.components.map((c) => c.position),
+      ...circuitData.nets.map((n) => n.position),
+    ];
+
+    const buffer = 2; //add a buffer of 2 circuit units to
+    const xExtent = d3.extent(allPositions, (p) => p.x);
+    const yExtent = d3.extent(allPositions, (p) => p.y);
+
+    return {
+      x: {
+        min: (xExtent[0] ?? 0) - buffer,
+        max: (xExtent[1] ?? 0) + buffer,
+      },
+      y: {
+        min: (yExtent[0] ?? 0) - buffer,
+        max: (yExtent[1] ?? 0) + buffer,
+      },
+    };
+  }
+
   public render(circuitData: CircuitData): void {
+    this.updateScalesToCircuit(circuitData);
     this.renderComponents(circuitData);
     this.renderNets(circuitData);
   }
