@@ -18,6 +18,7 @@ from schemas.circuit_with_layout import CircuitWithLayout
 from circuit_logging import log_circuit_generation
 from examples.voltage_divider import voltage_divider
 from examples.current_divider import current_divider
+import logging
 
 load_dotenv()
 
@@ -90,8 +91,16 @@ def send_current_divider():
         return CircuitWithLayout(**current_divider)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,  # Change to INFO or ERROR if too verbose
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+)
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True) 
+    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True, log_level="error", access_log=True)
