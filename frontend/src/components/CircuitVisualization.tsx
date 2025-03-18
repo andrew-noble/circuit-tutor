@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { CircuitData } from "../types";
-import { CircuitRenderer, config } from "../services/CircuitRenderer";
+import { CircuitRenderer, rendererConfig } from "../services/renderer";
 
 interface CircuitVisualizationProps {
   width?: number;
@@ -9,8 +9,8 @@ interface CircuitVisualizationProps {
 }
 
 const CircuitVisualization: React.FC<CircuitVisualizationProps> = ({
-  width = config.dimensions.width,
-  height = config.dimensions.height,
+  width = rendererConfig.dimensions.width,
+  height = rendererConfig.dimensions.height,
   circuitData,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
