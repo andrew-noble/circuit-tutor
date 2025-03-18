@@ -1,95 +1,54 @@
-[
-  {
-    "id": "V1",
-    "type": "voltage_source",
-    "value": "10V",
-    "pins": [
-      "+",
-      "-"
-    ],
-    "position": [
-      0,
-      0
-    ]
-  },
-  {
-    "id": "N1",
-    "name": "Net 1",
-    "connections": [
-      [
-        "V1",
-        "+"
+{
+  "components": [
+    {
+      "id": "V1",
+      "type": "voltage_source",
+      "value": "10V",
+      "pins": ["+", "-"],
+      "position": { "x": 0, "y": 0 }
+    },
+    {
+      "id": "R1",
+      "type": "resistor",
+      "value": "1kOhm",
+      "pins": ["a", "b"],
+      "position": { "x": 2, "y": 0 }
+    },
+    {
+      "id": "R2",
+      "type": "resistor",
+      "value": "2kOhm",
+      "pins": ["a", "b"],
+      "position": { "x": 4, "y": 0 }
+    }
+  ],
+  "nets": [
+    {
+      "id": "N1",
+      "name": "Net 1",
+      "connections": [
+        ["V1", "+"],
+        ["R1", "a"]
       ],
-      [
-        "R1",
-        "a"
-      ]
-    ],
-    "position": [
-      1,
-      0
-    ]
-  },
-  {
-    "id": "R1",
-    "type": "resistor",
-    "value": "1kOhm",
-    "pins": [
-      "a",
-      "b"
-    ],
-    "position": [
-      2,
-      0
-    ]
-  },
-  {
-    "id": "N2",
-    "name": "Net 2",
-    "connections": [
-      [
-        "R1",
-        "b"
+      "position": { "x": 1, "y": 0 }
+    },
+    {
+      "id": "N2",
+      "name": "Net 2",
+      "connections": [
+        ["R1", "b"],
+        ["R2", "a"]
       ],
-      [
-        "R2",
-        "a"
-      ]
-    ],
-    "position": [
-      3,
-      0
-    ]
-  },
-  {
-    "id": "R2",
-    "type": "resistor",
-    "value": "2kOhm",
-    "pins": [
-      "a",
-      "b"
-    ],
-    "position": [
-      4,
-      0
-    ]
-  },
-  {
-    "id": "N3",
-    "name": "Net 3",
-    "connections": [
-      [
-        "R2",
-        "b"
+      "position": { "x": 3, "y": 0 }
+    },
+    {
+      "id": "N3",
+      "name": "Net 3",
+      "connections": [
+        ["R2", "b"],
+        ["V1", "-"]
       ],
-      [
-        "V1",
-        "-"
-      ]
-    ],
-    "position": [
-      5,
-      0
-    ]
-  }
-]
+      "position": { "x": 5, "y": 0 }
+    }
+  ]
+}
