@@ -61,3 +61,7 @@ button:disabled {
   border-radius: 8px;
   overflow: hidden;
 }
+
+path {
+  shape-rendering: geometricPrecision; /* helps a little with aliasing */
+}
