@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
 import { CircuitData } from "../types";
 import { CircuitRenderer, config } from "../services/CircuitRenderer";
 
@@ -17,37 +16,34 @@ const CircuitVisualization: React.FC<CircuitVisualizationProps> = ({
   const svgRef = useRef<SVGSVGElement>(null);
   const rendererRef = useRef<CircuitRenderer | null>(null);
 
+  //init effect - instantiate a renderer object
   useEffect(() => {
-    const loadSymbols = async () => {
+    const initializeRenderer = () => {
       if (!svgRef.current) return;
 
-      const spriteSheet = await d3.xml("/svg/symbol-sheet.svg");
-      const defs = spriteSheet.documentElement.querySelector("defs");
-      if (defs) {
-        svgRef.current.appendChild(defs.cloneNode(true));
-      }
-    };
+      try {
+        rendererRef.current = new CircuitRenderer(svgRef.current);
 
-    const initializeRenderer = async () => {
-      if (!svgRef.current) return;
-
-      await loadSymbols();
-      rendererRef.current = new CircuitRenderer(svgRef.current);
-
-      if (circuitData) {
-        rendererRef.current.render(circuitData);
+        // Render initial data if available
+        if (circuitData && rendererRef.current) {
+          rendererRef.current.render(circuitData);
+        }
+      } catch (error) {
+        console.error("Failed to initialize renderer:", error);
       }
     };
 
     initializeRenderer();
 
     return () => {
-      if (svgRef.current) {
-        d3.select(svgRef.current).selectAll("*").remove();
+      if (rendererRef.current) {
+        rendererRef.current.clear();
+        rendererRef.current = null;
       }
     };
   }, []);
 
+  //rendering effect - rerender the circuit if the data changes
   useEffect(() => {
     if (circuitData && rendererRef.current) {
       rendererRef.current.render(circuitData);

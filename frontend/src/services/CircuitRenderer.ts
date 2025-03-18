@@ -9,6 +9,8 @@ export const config = {
     resistor: "#resistor",
     voltage_source: "#voltage-source",
     diode: "#diode",
+    inductor: "#inductor",
+    capacitor: "#capacitor",
   } as const,
   dimensions: {
     width: 1000,
@@ -42,6 +44,14 @@ export class CircuitRenderer {
     width: number,
     height: number
   ) {
+    //load the symbol sheet svg and append the defs to the main svg
+    d3.xml("/svg/symbol-sheet.svg").then((svg) => {
+      const defs = svg.documentElement.querySelector("defs");
+      if (defs) {
+        svgElement.appendChild(defs.cloneNode(true));
+      }
+    });
+
     return d3
       .select(svgElement)
       .attr("width", width + config.padding.left + config.padding.right)
@@ -259,8 +269,13 @@ export class CircuitRenderer {
   }
 
   public render(circuitData: CircuitData): void {
+    this.clear();
     this.updateScalesToCircuit(circuitData);
     this.renderComponents(circuitData);
     this.renderNets(circuitData);
+  }
+
+  public clear(): void {
+    this.svg.selectAll("*").remove();
   }
 }
