@@ -155,6 +155,22 @@ export class CircuitRenderer {
       .attr("width", config.componentSize)
       .attr("height", config.componentSize);
 
+    // Add ID annotation
+    componentGroups
+      .append("text")
+      .attr("x", config.componentSize / 2) // Centered within the component
+      .attr("y", -5) // Directly above the component
+      .attr("text-anchor", "middle")
+      .text((d: ComponentData) => d.id);
+
+    // Add value annotation
+    componentGroups
+      .append("text")
+      .attr("x", config.componentSize / 2) // Centered within the component
+      .attr("y", config.componentSize + 5) // Directly below the component
+      .attr("text-anchor", "middle")
+      .text((d: ComponentData) => d.value);
+
     // Add debug rectangles
     // componentGroups
     //   .append("rect")
