@@ -71,4 +71,5 @@ def generate_layout(circuit: CircuitDigraph) -> CircuitWithLayout:
                 position=NetPosition(x=x, y=y)
             ))
     
+    #note: this function guarantees sequential ordering of components and nets due to the bfs tranversal
     return CircuitWithLayout(components=components, nets=nets)
