@@ -21,7 +21,7 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
         
         # Add current node to layout
         node_data = circuit.graph.nodes[current_node]["data"]
-        layout.append({**node_data, "position": (x_pos, int(y_pos))})
+        layout.append({**node_data, "position": (int(x_pos), int(y_pos))})
         
         # Process neighbors
         neighbors = list(circuit.graph.neighbors(current_node))
@@ -51,19 +51,26 @@ def generate_layout(circuit: CircuitDigraph) -> dict:
             components.append({
                 "id": node["id"],
                 "type": node["type"],
-                "name": node.get("value", ""),
+                "name": node.get("name", None),  # Optional name field
+                "value": node.get("value", ""),  # Required value field
                 "pins": node["pins"],
-                "position": {"x": x, "y": y}
+                "position": {
+                    "x": int(x),
+                    "y": int(y),
+                    "rotation": 0.0  # Default rotation
+                }
             })
         else:  # This is a net
             nets.append({
                 "id": node["id"],
-                "name": node.get("name", f"Net {node['id']}"),
-                "connections": node["connections"],
-                "position": {"x": x, "y": y}
+                "name": node.get("name", None),  # Optional name field
+                "connections": [[str(c), str(p)] for c, p in node["connections"]],  # Ensure string types
+                "position": {
+                    "x": int(x),
+                    "y": int(y)
+                }
             })
     
-    # Note: this function guarantees sequential ordering of components and nets due to the bfs traversal
     return {
         "components": components,
         "nets": nets
