@@ -17,7 +17,7 @@ voltage_divider = {
         {
           "id": "R1",
           "type": "resistor",
-          "value": "1k",
+          "value": "1kΩ",
           "pins": [
             "a",
             "b"
@@ -31,7 +31,7 @@ voltage_divider = {
         {
           "id": "R2",
           "type": "resistor",
-          "value": "1k",
+          "value": "1kΩ",
           "pins": [
             "a",
             "b"
