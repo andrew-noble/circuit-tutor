@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import "./index.css";
+import React, { useState } from "react";
 import CircuitVisualization from "./components/CircuitVisualization";
 import CircuitForm from "./components/CircuitForm";
 import ExampleCircuitButtons from "./components/ExampleCircuitButtons";
 import CircuitTutor from "./components/CircuitTutor";
-import "./components/CircuitTutor.css";
 import type { CircuitData } from "./types";
 
 const App: React.FC = () => {

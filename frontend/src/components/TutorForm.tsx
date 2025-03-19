@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import type { CircuitData } from "../types";
 import Spinner from "./Spinner";
-import "../styles/forms.css";
 
 interface TutorFormProps {
   circuitData: CircuitData | undefined;

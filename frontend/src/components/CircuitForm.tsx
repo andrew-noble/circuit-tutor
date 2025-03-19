@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import type { CircuitData } from "../types";
 import Spinner from "./Spinner";
-import "../styles/forms.css";
 
 interface CircuitFormProps {
   onCircuitReceived: (circuit: CircuitData) => void;
@@ -78,19 +77,6 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
 
   return (
     <div className="circuit-form-container">
-      <div className="suggestion-buttons">
-        {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => handleSuggestionClick(suggestion)}
-            disabled={isLoading}
-            className="suggestion-button"
-          >
-            {suggestion}
-          </button>
-        ))}
-      </div>
       <form onSubmit={handleSubmit} className="circuit-form">
         <div className="form-group">
           <label htmlFor="circuit-prompt">
@@ -115,6 +101,19 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
           {isLoading ? <Spinner /> : "Generate Circuit"}
         </button>
       </form>
+      <div className="suggestion-buttons">
+        {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => handleSuggestionClick(suggestion)}
+            disabled={isLoading}
+            className="suggestion-button"
+          >
+            {suggestion}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import type { CircuitData } from "../types";
-import "./ExampleCircuitButtons.css";
 
 interface ExampleCircuitButtonsProps {
   onCircuitReceived: (circuit: CircuitData) => void;
