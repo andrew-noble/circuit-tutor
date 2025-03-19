@@ -231,3 +231,61 @@ path {
   margin-left: 8px;
   color: #3b82f6;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.info-link {
+  color: #0066cc;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.info-link:hover {
+  background-color: rgba(0, 102, 204, 0.1);
+}
+
+.info-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.info-content {
+  margin-top: 20px;
+}
+
+.info-content p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.info-content ul {
+  margin-left: 20px;
+  margin-bottom: 24px;
+}
+
+.info-content li {
+  margin-bottom: 8px;
+}
+
+.back-link {
+  display: inline-block;
+  color: #0066cc;
+  text-decoration: none;
+  margin-top: 24px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.back-link:hover {
+  background-color: rgba(0, 102, 204, 0.1);
+}

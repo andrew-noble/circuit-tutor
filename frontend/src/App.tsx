@@ -1,22 +1,40 @@
 import "./index.css";
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import CircuitVisualization from "./components/CircuitVisualization";
 import CircuitForm from "./components/CircuitForm";
-import DebugCircuitButtons from "./components/DebugCircuitButtons";
+// import DebugCircuitButtons from "./components/DebugCircuitButtons";
 import CircuitTutor from "./components/CircuitTutor";
+import Info from "./components/Info";
 import type { CircuitData } from "./types";
 
-const App: React.FC = () => {
+const MainPage: React.FC = () => {
   const [circuitData, setCircuitData] = useState<CircuitData | undefined>();
 
   return (
     <div className="app">
-      <h1>Circuit Tutor</h1>
+      <div className="header">
+        <h1>Circuit Tutor</h1>
+        <Link to="/info" className="info-link">
+          Info
+        </Link>
+      </div>
       {/* <DebugCircuitButtons onCircuitReceived={setCircuitData} /> */}
       <CircuitForm onCircuitReceived={setCircuitData} />
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
       <CircuitTutor circuitData={circuitData} />
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/info" element={<Info />} />
+      </Routes>
+    </Router>
   );
 };
 
