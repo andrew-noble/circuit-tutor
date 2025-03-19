@@ -9,22 +9,28 @@ from pydantic import BaseModel
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from schemas.circuit import Circuit
-from circuit_prompt import CIRCUIT_SYSTEM_PROMPT
+from prompts.generation_system_prompt import generation_system_prompt
+from prompts.tutoring_system_prompt import tutoring_system_prompt
 from pydantic import ValidationError
 from fastapi.responses import JSONResponse
 from CircuitDigraph import CircuitDigraph
 from generate_layout import generate_layout
 from schemas.circuit_with_layout import CircuitWithLayout
 from circuit_logging import log_circuit_generation
-from examples.voltage_divider import voltage_divider
-from examples.current_divider import current_divider
 import logging
 
 load_dotenv()
 
 # Pydantic models for request validation
-class CircuitRequest(BaseModel):
+class CircuitGenerationRequest(BaseModel):
     prompt: str
+
+class CircuitTutorRequest(BaseModel):
+    prompt: str
+    circuit_data: CircuitWithLayout
+
+class CircuitTutorResponse(BaseModel):
+    tutor_response: str
 
 app = FastAPI(title="Circuit Visualization API")
 
@@ -37,7 +43,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-MODEL = "o3-mini"
+GENERATION_MODEL = "o3-mini"
+TUTOR_MODEL = "gpt-4o"
 
 # Initialize OpenAI client
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -47,11 +54,11 @@ async def test():
     return {"message": "Hello, World!"}
 
 @app.post("/generate-circuit", response_model=CircuitWithLayout)
-async def generate_circuit(data: CircuitRequest):
+async def generate_circuit(data: CircuitGenerationRequest):
     try:
         response = await client.beta.chat.completions.parse(
-            model=MODEL,
-            messages=[{"role": "system", "content": CIRCUIT_SYSTEM_PROMPT}, {"role": "user", "content": data.prompt}],
+            model=GENERATION_MODEL,
+            messages=[{"role": "system", "content": generation_system_prompt}, {"role": "user", "content": data.prompt}],
             response_format=Circuit
         )
         
@@ -64,7 +71,7 @@ async def generate_circuit(data: CircuitRequest):
         # Log the whole pipeline (prompting, generation, and layout)
         log_circuit_generation(
             endpoint="/generate-circuit",
-            system_prompt=CIRCUIT_SYSTEM_PROMPT,
+            system_prompt=generation_system_prompt,
             user_prompt=data.prompt,
             response_data=circuit_data_dict,
             layout=layout
@@ -77,30 +84,53 @@ async def generate_circuit(data: CircuitRequest):
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/tutor-circuit", response_model=CircuitTutorResponse)
+async def tutor_circuit(data: CircuitTutorRequest):
+    try:
+        # Convert circuit data to string for context
+        circuit_context = json.dumps(data.circuit_data.model_dump())
+        
+        response = await client.chat.completions.create(
+            model=TUTOR_MODEL,
+            messages=[
+                {"role": "system", "content": tutoring_system_prompt},
+                {"role": "user", "content": f"Circuit context: {circuit_context}\n\nUser question: {data.prompt}"}
+            ]
+        )
+
+        return CircuitTutorResponse(tutor_response=response.choices[0].message.content)
+    
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/voltage-divider", response_model=CircuitWithLayout)
 def send_voltage_divider():
     try:
-        return CircuitWithLayout(**voltage_divider)
+        with open("examples/voltage_divider.json", "r") as f:
+            data = json.load(f)
+        return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/current-divider", response_model=CircuitWithLayout)
 def send_current_divider():
     try:
-        return CircuitWithLayout(**current_divider)
+        with open("examples/current_divider.json", "r") as f:
+            data = json.load(f)
+        return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-    import logging
-
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG,  # Change to INFO or ERROR if too verbose
-    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-)
+# # Configure logging
+# logging.basicConfig(
+#     level=logging.DEBUG,  # Change to INFO or ERROR if too verbose
+#     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+# )
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True, log_level="error", access_log=True)
+    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True)
