@@ -9,12 +9,13 @@ Ensure all circuits are electrically complete by following these rules:
 - All intended currents have a defined, continuous path.  
 - No short circuits exist that bypass resistors or short voltage sources to ground.
 - Connections should be of the form [component_id, pin_number], and should map to the component's pins
-- If no component values are provided, choose reasonable defaults
+- If no component values are provided, choose reasonable values, and include units like V, Ω, F, H, etc.
+- For values that need to be in kilo, use the symbol "k" before the base unit. For example, 1kΩ = 1000Ω.
 
 Naming conventions:
-- the voltage source should have a type of "voltage_source" and a name of "V1"
-- resistors should have a type of "resistor" and a name of "R<num>", where <num> is the resistor number, starting at 1
-- nets should have a type of "net" and a name of "N<num>", where <num> is the net number, starting at 1
+- the voltage source should have a type of "voltage_source" and an ID of "V1"
+- resistors should have a type of "resistor" and ID of "R<num>", where <num> is the resistor number, starting at 1
+- nets should have an ID of "N<num>", where <num> is the net number, starting at 1
 - for bidirectional components, like resistors, pins should alwaysbe ["a", "b"] where a is higher voltage than b
 - for unidirectional components, like voltage sources, pins should always be ["+", "-"]
 
