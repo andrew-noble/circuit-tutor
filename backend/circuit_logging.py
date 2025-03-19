@@ -3,13 +3,14 @@ import json
 import datetime
 
 # Simple logging function
-def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, layout):
+def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, layout, model):
     log_file = "./logs/request_logs.json"
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     
     log_entry = {
         "timestamp": datetime.datetime.now().isoformat(),
         "endpoint": endpoint,
+        "model": model,
         "system_prompt": system_prompt,
         "user_prompt": user_prompt,
         "response": response_data,
