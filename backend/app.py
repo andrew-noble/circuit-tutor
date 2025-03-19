@@ -17,7 +17,6 @@ from CircuitDigraph import CircuitDigraph
 from generate_layout import generate_layout
 from schemas.circuit_with_layout import CircuitWithLayout
 from circuit_logging import log_circuit_generation
-import logging
 
 load_dotenv()
 
@@ -63,12 +62,9 @@ async def generate_circuit(data: CircuitGenerationRequest):
         )
         
         circuit_data_dict = json.loads(response.choices[0].message.content)
-
-        # Convert to graph and generate layout
         circuit_graph = CircuitDigraph(circuit_data_dict)
         layout = generate_layout(circuit_graph)
 
-        # Log the whole pipeline (prompting, generation, and layout)
         log_circuit_generation(
             endpoint="/generate-circuit",
             system_prompt=generation_system_prompt,
@@ -77,18 +73,14 @@ async def generate_circuit(data: CircuitGenerationRequest):
             layout=layout
         )
         
-        # Validate response using Pydantic
         return CircuitWithLayout(**layout)
         
-    except ValidationError as e:
-        raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 @app.post("/tutor-circuit", response_model=CircuitTutorResponse)
 async def tutor_circuit(data: CircuitTutorRequest):
     try:
-        # Convert circuit data to string for context
         circuit_context = json.dumps(data.circuit_data.model_dump())
         
         response = await client.chat.completions.create(
@@ -98,13 +90,17 @@ async def tutor_circuit(data: CircuitTutorRequest):
                 {"role": "user", "content": f"Circuit context: {circuit_context}\n\nUser question: {data.prompt}"}
             ]
         )
+        response_content = response.choices[0].message.content
 
-        return CircuitTutorResponse(tutor_response=response.choices[0].message.content)
+        return CircuitTutorResponse(tutor_response=response_content)
     
     except ValidationError as e:
+        print(e)
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
+    
 
 @app.get("/voltage-divider", response_model=CircuitWithLayout)
 def send_voltage_divider():
@@ -114,7 +110,7 @@ def send_voltage_divider():
         return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 @app.get("/current-divider", response_model=CircuitWithLayout)
 def send_current_divider():
     try:
@@ -124,13 +120,14 @@ def send_current_divider():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-# # Configure logging
-# logging.basicConfig(
-#     level=logging.DEBUG,  # Change to INFO or ERROR if too verbose
-#     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-# )
+import logging
+# Configure logging manually
+logging.basicConfig(
+    format="[%(asctime)s] [%(levelname)s] - %(message)s",
+    level=logging.DEBUG
+)
 
 # uvicorn is a webserver, sorta like node. (asynchronous server gateway node, asgn)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run('app:app', host="0.0.0.0", port=8000, reload=True, log_level="debug", access_log=True)
