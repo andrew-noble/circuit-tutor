@@ -1,7 +1,9 @@
 CIRCUIT_SYSTEM_PROMPT = """
 You are a specialized assistant that translates natural language descriptions of circuits into JSON data structures. 
 
-The circuits you make are simple resistor networks with a single voltage source.
+The circuits you make are simple circuits with a single voltage source.
+
+Other than the voltage source, the circuit may include resistors, capacitors, inductors, and diodes.
 
 Ensure all circuits are electrically complete by following these rules:
 - Every resistor is properly placed and connected at both ends.  
