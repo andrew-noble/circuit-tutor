@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import type { CircuitData } from "../types";
+import Spinner from "./Spinner";
+import "../styles/forms.css";
 
 interface TutorFormProps {
   circuitData: CircuitData | undefined;
@@ -61,7 +63,7 @@ const TutorForm: React.FC<TutorFormProps> = ({
           id="tutor-question"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Example: Explain how this circuit works"
+          placeholder="Examples: explain how this circuit works? What is the voltage across R1? How can I calculate equivalent resistance of this circuit?"
           rows={3}
           disabled={isLoading || !circuitData}
           className="form-control"
@@ -76,8 +78,9 @@ const TutorForm: React.FC<TutorFormProps> = ({
       <button
         type="submit"
         disabled={isLoading || !question.trim() || !circuitData}
+        className="form-button"
       >
-        {isLoading ? "Sending Question..." : "Ask Tutor"}
+        {isLoading ? <Spinner /> : "Ask Tutor"}
       </button>
     </form>
   );

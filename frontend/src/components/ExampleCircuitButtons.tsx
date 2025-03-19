@@ -35,13 +35,13 @@ const ExampleCircuitButtons: React.FC<ExampleCircuitButtonsProps> = ({
           onClick={() => fetchCircuit("voltage-divider")}
           className="example-button"
         >
-          Load Voltage Divider
+          Load Debug Voltage Divider
         </button>
         <button
           onClick={() => fetchCircuit("current-divider")}
           className="example-button"
         >
-          Load Current Divider
+          Load Debug Current Divider
         </button>
       </div>
     </div>
