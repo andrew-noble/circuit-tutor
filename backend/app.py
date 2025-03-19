@@ -70,12 +70,16 @@ async def generate_circuit(data: CircuitGenerationRequest):
             system_prompt=generation_system_prompt,
             user_prompt=data.prompt,
             response_data=circuit_data_dict,
-            layout=layout
+            layout=layout,
+            model=GENERATION_MODEL
         )
         
         return CircuitWithLayout(**layout)
-        
+    except ValidationError as e:
+        print(e)
+        raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/tutor-circuit", response_model=CircuitTutorResponse)
