@@ -3,6 +3,8 @@ import "./index.css";
 import CircuitVisualization from "./components/CircuitVisualization";
 import CircuitForm from "./components/CircuitForm";
 import ExampleCircuitButtons from "./components/ExampleCircuitButtons";
+import CircuitTutor from "./components/CircuitTutor";
+import "./components/CircuitTutor.css";
 import type { CircuitData } from "./types";
 
 const App: React.FC = () => {
@@ -14,6 +16,7 @@ const App: React.FC = () => {
       <ExampleCircuitButtons onCircuitReceived={setCircuitData} />
       <CircuitForm onCircuitReceived={setCircuitData} />
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
+      <CircuitTutor circuitData={circuitData} />
     </div>
   );
 };
