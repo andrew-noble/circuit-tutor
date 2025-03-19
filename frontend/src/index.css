@@ -11,12 +11,17 @@
 
 /* Common Form Styles */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
+}
+
+label {
+  display: block;
   font-weight: bold;
 }
 

@@ -1,11 +1,11 @@
 import React from "react";
 import type { CircuitData } from "../types";
 
-interface ExampleCircuitButtonsProps {
+interface DebugCircuitButtonsProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
 
-const ExampleCircuitButtons: React.FC<ExampleCircuitButtonsProps> = ({
+const DebugCircuitButtons: React.FC<DebugCircuitButtonsProps> = ({
   onCircuitReceived,
 }) => {
   const [error, setError] = React.useState<string | null>(null);
@@ -47,4 +47,4 @@ const ExampleCircuitButtons: React.FC<ExampleCircuitButtonsProps> = ({
   );
 };
 
-export default ExampleCircuitButtons;
+export default DebugCircuitButtons;

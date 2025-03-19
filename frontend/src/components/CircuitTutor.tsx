@@ -12,7 +12,6 @@ const CircuitTutor: React.FC<CircuitTutorProps> = ({ circuitData }) => {
 
   return (
     <div className="circuit-tutor">
-      <h2>Circuit Tutor</h2>
       <TutorForm
         circuitData={circuitData}
         onResponseReceived={setTutorResponse}

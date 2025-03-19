@@ -79,18 +79,30 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
     <div className="circuit-form-container">
       <form onSubmit={handleSubmit} className="circuit-form">
         <div className="form-group">
-          <label htmlFor="circuit-prompt">
-            Describe the circuit you want to create:
-          </label>
+          <label htmlFor="circuit-prompt">Make a circuit:</label>
           <textarea
             id="circuit-prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Create a voltage divider with two resistors one 1kOhm and the other 2kOhm"
+            placeholder="Create a voltage divider with two resistors, one 1kOhm and the other 2kOhm. Voltage source is 5V."
             rows={3}
             disabled={isLoading}
             className="form-control"
           />
+        </div>
+        <label>Sample circuit prompts:</label>
+        <div className="suggestion-buttons">
+          {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => handleSuggestionClick(suggestion)}
+              disabled={isLoading}
+              className="suggestion-button"
+            >
+              {suggestion}
+            </button>
+          ))}
         </div>
         {error && <div className="error-message">{error}</div>}
         <button
@@ -101,19 +113,6 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
           {isLoading ? <Spinner /> : "Generate Circuit"}
         </button>
       </form>
-      <div className="suggestion-buttons">
-        {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => handleSuggestionClick(suggestion)}
-            disabled={isLoading}
-            className="suggestion-button"
-          >
-            {suggestion}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ const Spinner: React.FC = () => {
   return (
     <div className="spinner">
       <div className="spinner-circle"></div>
-      <span className="spinner-text">Loading...</span>
+      <span className="spinner-text">Loading... (might take a 10s)</span>
     </div>
   );
 };
