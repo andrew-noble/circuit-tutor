@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import CircuitVisualization from "./components/CircuitVisualization";
 import CircuitForm from "./components/CircuitForm";
-// import DebugCircuitButtons from "./components/DebugCircuitButtons";
+import SampleCircuitButtons from "./components/SampleCircuitButtons";
 import CircuitTutor from "./components/CircuitTutor";
 import Info from "./components/Info";
 import type { CircuitData } from "./types";
@@ -14,13 +14,13 @@ const MainPage: React.FC = () => {
   return (
     <div className="app">
       <div className="header">
-        <h1>Circuit Tutor</h1>
+        <h1 style={{ height: "60px" }}>Circuit Tutor</h1>
         <Link to="/info" className="info-link">
           Info
         </Link>
       </div>
-      {/* <DebugCircuitButtons onCircuitReceived={setCircuitData} /> */}
       <CircuitForm onCircuitReceived={setCircuitData} />
+      <SampleCircuitButtons onCircuitReceived={setCircuitData} />
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
       <CircuitTutor circuitData={circuitData} />
     </div>

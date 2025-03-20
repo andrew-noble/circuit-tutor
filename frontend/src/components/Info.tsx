@@ -9,7 +9,8 @@ const Info: React.FC = () => {
         <p>
           Circuit Tutor is an interactive learning tool designed to help
           students understand basic circuit theory via visualization and
-          feedback from an LLM.
+          feedback from an LLM. It uses o3-mini to generate circuits and gpt-4o
+          to tutor.
         </p>
         <p>
           Currently, it only supports circuits with a single voltage source and

@@ -79,7 +79,7 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
     <div className="circuit-form-container">
       <form onSubmit={handleSubmit} className="circuit-form">
         <div className="form-group">
-          <label htmlFor="circuit-prompt">Make a circuit:</label>
+          <label htmlFor="circuit-prompt">Generate a circuit with AI:</label>
           <textarea
             id="circuit-prompt"
             value={prompt}

@@ -1,11 +1,11 @@
 import React from "react";
 import type { CircuitData } from "../types";
 
-interface DebugCircuitButtonsProps {
+interface SampleCircuitButtonsProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
 
-const DebugCircuitButtons: React.FC<DebugCircuitButtonsProps> = ({
+const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
   onCircuitReceived,
 }) => {
   const [error, setError] = React.useState<string | null>(null);
@@ -34,13 +34,13 @@ const DebugCircuitButtons: React.FC<DebugCircuitButtonsProps> = ({
           onClick={() => fetchCircuit("voltage-divider")}
           className="example-button"
         >
-          Load Debug Voltage Divider
+          Load Sample Voltage Divider
         </button>
         <button
           onClick={() => fetchCircuit("current-divider")}
           className="example-button"
         >
-          Load Debug Current Divider
+          Load Sample Current Divider
         </button>
       </div>
     </div>
