@@ -13,9 +13,7 @@ const Info: React.FC = () => {
           to tutor.
         </p>
         <p>
-          Currently, it only supports circuits with a single voltage source and
-          resistors, inductors, capacitors, and diodes. It's a prototype for
-          now, and I'd love to hear your{" "}
+          It's a prototype for now, and I'd love to hear your{" "}
           <a href="https://forms.gle/xwDaoUbPF7cm1FmcA">suggestions</a> on
           features you'd like to see!
         </p>

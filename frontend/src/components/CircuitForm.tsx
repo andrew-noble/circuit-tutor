@@ -82,6 +82,10 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
       <form onSubmit={handleSubmit} className="circuit-form">
         <div className="form-group">
           <label htmlFor="circuit-prompt">Generate a circuit with AI:</label>
+          <p style={{ color: "#e28743" }}>
+            Currently, only circuits with a single voltage source and resistors,
+            inductors, capacitors, and diodes are supported.
+          </p>
           <textarea
             id="circuit-prompt"
             value={prompt}
