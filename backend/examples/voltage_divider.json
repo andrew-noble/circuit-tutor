@@ -25,7 +25,7 @@
     {
       "id": "R2",
       "type": "resistor",
-      "value": "1kΩ",
+      "value": "2kΩ",
       "pins": ["a", "b"],
       "position": {
         "x": 4,
