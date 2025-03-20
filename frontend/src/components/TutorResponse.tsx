@@ -8,13 +8,29 @@ interface TutorResponseProps {
   response: string | null;
 }
 
-const TutorResponse: React.FC<TutorResponseProps> = ({ response }) => {
-  console.log("TutorResponse received:", response);
+const convertLatexDelimiters = (text: string): string => {
+  if (!text) return "";
 
-  if (!response) {
-    console.log("Response is null, not rendering");
-    return null;
-  }
+  // Convert block math delimiters from openAI \[\] to $$ that our parsing libs expect
+  let converted = text.replace(
+    /\\\[([\s\S]*?)\\\]/g,
+    (_, match) => `$$${match}$$`
+  );
+
+  // Convert inline math delimiters
+  converted = converted.replace(
+    /\\\(([\s\S]*?)\\\)/g,
+    (_, match) => `$${match}$`
+  );
+
+  return converted;
+};
+
+const TutorResponse: React.FC<TutorResponseProps> = ({ response }) => {
+  if (!response) return null;
+
+  const processedResponse = convertLatexDelimiters(response);
+  // console.log("Processed response:", processedResponse);
 
   return (
     <div className="tutor-response">
@@ -23,18 +39,8 @@ const TutorResponse: React.FC<TutorResponseProps> = ({ response }) => {
         <ReactMarkdown
           remarkPlugins={[remarkMath]}
           rehypePlugins={[rehypeKatex]}
-          components={{
-            p: ({ children }) => <p className="mb-4">{children}</p>,
-            ul: ({ children }) => (
-              <ul className="list-disc pl-6 mb-4">{children}</ul>
-            ),
-            ol: ({ children }) => (
-              <ol className="list-decimal pl-6 mb-4">{children}</ol>
-            ),
-            li: ({ children }) => <li className="mb-2">{children}</li>,
-          }}
         >
-          {response}
+          {processedResponse}
         </ReactMarkdown>
       </div>
     </div>

@@ -84,7 +84,7 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
             id="circuit-prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Create a voltage divider with two resistors, one 1kOhm and the other 2kOhm. Voltage source is 5V."
+            placeholder="Example:Create a voltage divider with two resistors, one 1kOhm and the other 2kOhm. Voltage source is 5V."
             rows={3}
             disabled={isLoading}
             className="form-control"
