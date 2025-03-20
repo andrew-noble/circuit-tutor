@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import type { CircuitData } from "../types";
 import Spinner from "./Spinner";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface CircuitFormProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
@@ -25,7 +27,7 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/generate-circuit", {
+      const response = await fetch(`${API_BASE_URL}/generate-circuit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +55,7 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/generate-circuit", {
+      const response = await fetch(`${API_BASE_URL}/generate-circuit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

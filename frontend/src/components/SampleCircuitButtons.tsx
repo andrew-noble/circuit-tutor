@@ -1,6 +1,8 @@
 import React from "react";
 import type { CircuitData } from "../types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface SampleCircuitButtonsProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
@@ -14,7 +16,7 @@ const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8000/${endpoint}`);
+      const response = await fetch(`${API_BASE_URL}/${endpoint}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

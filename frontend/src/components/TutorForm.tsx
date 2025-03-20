@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import type { CircuitData } from "../types";
 import Spinner from "./Spinner";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface TutorFormProps {
   circuitData: CircuitData | undefined;
   onResponseReceived: (response: string) => void;
@@ -27,7 +29,7 @@ const TutorForm: React.FC<TutorFormProps> = ({
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/tutor-circuit", {
+      const response = await fetch(`${API_BASE_URL}/tutor-circuit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
