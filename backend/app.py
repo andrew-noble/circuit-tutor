@@ -17,6 +17,7 @@ from CircuitDigraph import CircuitDigraph
 from generate_layout import generate_layout
 from schemas.circuit_with_layout import CircuitWithLayout
 from circuit_logging import log_circuit_generation, log_circuit_tutoring
+import time
 
 load_dotenv()
 
@@ -42,6 +43,11 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+# gpt-4o ~ 3s (but struggles with more complex circuits)
+# o1 ~ 10s
+# o3-mini ~ 15s
+# o1-mini doesn't work bc no system message support
+
 GENERATION_MODEL = "o3-mini"
 TUTOR_MODEL = "gpt-4o"
 
@@ -54,16 +60,25 @@ async def test():
 
 @app.post("/generate-circuit", response_model=CircuitWithLayout)
 async def generate_circuit(data: CircuitGenerationRequest):
+    api_start_time = time.perf_counter()
     try:
         response = await client.beta.chat.completions.parse(
             model=GENERATION_MODEL,
             messages=[{"role": "system", "content": generation_system_prompt}, {"role": "user", "content": data.prompt}],
             response_format=Circuit
         )
-        
         circuit_data_dict = json.loads(response.choices[0].message.content)
+        api_duration = time.perf_counter() - api_start_time
+
+        layout_time_start = time.perf_counter()
+
         circuit_graph = CircuitDigraph(circuit_data_dict)
         layout = generate_layout(circuit_graph)
+
+        layout_time = time.perf_counter() - layout_time_start
+
+        print(f"API duration: {api_duration} with model {GENERATION_MODEL}")
+        print(f"Layout duration: {layout_time}")
 
         log_circuit_generation(
             endpoint="/generate-circuit",
@@ -71,9 +86,11 @@ async def generate_circuit(data: CircuitGenerationRequest):
             user_prompt=data.prompt,
             response_data=circuit_data_dict,
             layout=layout,
-            model=GENERATION_MODEL
+            model=GENERATION_MODEL,
+            api_duration=api_duration,
+            layout_duration=layout_time
         )
-        
+
         return CircuitWithLayout(**layout)
     except ValidationError as e:
         print(e)

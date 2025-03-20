@@ -3,7 +3,7 @@ import json
 import datetime
 
 # Simple logging function
-def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, layout, model):
+def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, layout, model, api_duration, layout_duration):
     log_file = "./logs/generation_logs.jsonl"
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     
@@ -14,7 +14,9 @@ def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, 
         "system_prompt": system_prompt,
         "user_prompt": user_prompt,
         "response": response_data,
-        "layout": layout
+        "layout": layout,
+        "api_duration": api_duration,
+        "layout_duration": layout_duration
     }
     
     # Append the new log entry
