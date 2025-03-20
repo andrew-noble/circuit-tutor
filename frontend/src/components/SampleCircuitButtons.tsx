@@ -33,7 +33,7 @@ const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
       {error && <div className="error-message">{error}</div>}
       <div className="button-group">
         <p>
-          Circuit generation takes ~15s. Try these instant sample circuits if
+          Circuit generation can take ~15s. Try these instant sample circuits if
           you want to use the tutor right away:
         </p>
         <button
