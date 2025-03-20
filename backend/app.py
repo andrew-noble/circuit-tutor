@@ -16,7 +16,7 @@ from fastapi.responses import JSONResponse
 from CircuitDigraph import CircuitDigraph
 from generate_layout import generate_layout
 from schemas.circuit_with_layout import CircuitWithLayout
-from circuit_logging import log_circuit_generation
+from circuit_logging import log_circuit_generation, log_circuit_tutoring
 
 load_dotenv()
 
@@ -96,8 +96,14 @@ async def tutor_circuit(data: CircuitTutorRequest):
         )
         response_content = response.choices[0].message.content
 
+        log_circuit_tutoring(
+            endpoint="/tutor-circuit",
+            system_prompt=tutoring_system_prompt,
+            user_prompt=data.prompt,
+            response_data=response_content,
+            model=TUTOR_MODEL
+        )
         return CircuitTutorResponse(tutor_response=response_content)
-    
     except ValidationError as e:
         print(e)
         raise HTTPException(status_code=422, detail=str(e))

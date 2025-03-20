@@ -4,7 +4,7 @@ import datetime
 
 # Simple logging function
 def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, layout, model):
-    log_file = "./logs/request_logs.json"
+    log_file = "./logs/generation_logs.jsonl"
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     
     log_entry = {
@@ -17,19 +17,27 @@ def log_circuit_generation(endpoint, system_prompt, user_prompt, response_data, 
         "layout": layout
     }
     
-    # Load existing logs if file exists
-    if os.path.exists(log_file):
-        try:
-            with open(log_file, 'r') as f:
-                logs = json.load(f)
-        except json.JSONDecodeError:
-            # If file is corrupted, start with empty list
-            logs = []
-    else:
-        logs = []    
-    # Append new log entry
-    logs.append(log_entry)
+    # Append the new log entry
+    with open(log_file, "a") as f:
+        json.dump(log_entry, f)
+        f.write("\n")  # Add newline to separate entries
 
-    # Write back to file
-    with open(log_file, "w") as f:
-        json.dump(logs, f, indent=2)
+
+def log_circuit_tutoring(endpoint, system_prompt, user_prompt, response_data, model):
+    log_file = "./logs/tutoring_logs.jsonl"
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+
+    log_entry = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "endpoint": endpoint,
+        "model": model,
+        "system_prompt": system_prompt,
+        "user_prompt": user_prompt,
+        "response": response_data
+    }
+    
+    # Append the new log entry
+    with open(log_file, "a") as f:
+        json.dump(log_entry, f)
+        f.write("\n")  # Add newline to separate entries
+
