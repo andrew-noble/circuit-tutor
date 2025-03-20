@@ -200,7 +200,14 @@ path {
 .button-group {
   display: flex;
   gap: 1rem;
+  align-items: center;
   justify-content: center;
+}
+
+.button-group p {
+  font-size: 0.9rem;
+  color: #666;
+  max-width: 200px;
 }
 
 /* Spinner Animation */
