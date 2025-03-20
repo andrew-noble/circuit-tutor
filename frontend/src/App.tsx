@@ -15,9 +15,19 @@ const MainPage: React.FC = () => {
     <div className="app">
       <div className="header">
         <h1 style={{ height: "60px" }}>Circuit Tutor</h1>
-        <Link to="/info" className="info-link">
-          Info
-        </Link>
+        <div className="header-links">
+          <a
+            href="https://forms.gle/xwDaoUbPF7cm1FmcA"
+            className="info-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Form for Feedback
+          </a>
+          <Link to="/info" className="info-link">
+            Info
+          </Link>
+        </div>
       </div>
       <CircuitForm onCircuitReceived={setCircuitData} />
       <SampleCircuitButtons onCircuitReceived={setCircuitData} />

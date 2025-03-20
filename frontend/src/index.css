@@ -247,6 +247,12 @@ path {
   margin-bottom: 20px;
 }
 
+.header-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 .info-link {
   color: #0066cc;
   text-decoration: none;
