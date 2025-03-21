@@ -9,7 +9,7 @@ export default defineConfig({
     outDir: "dist",
   },
   server: {
-    port: 8000,
+    port: 5173,
     host: true, // needed for docker/container environments
   },
 });

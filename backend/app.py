@@ -3,7 +3,7 @@
 import os
 import json
 import datetime
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
@@ -18,8 +18,14 @@ from generate_layout import generate_layout
 from schemas.circuit_with_layout import CircuitWithLayout
 from circuit_logging import log_circuit_generation, log_circuit_tutoring
 import time
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 load_dotenv()
+
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
 
 # Pydantic models for request validation
 class CircuitGenerationRequest(BaseModel):
@@ -33,6 +39,8 @@ class CircuitTutorResponse(BaseModel):
     tutor_response: str
 
 app = FastAPI(title="Circuit Visualization API")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Add CORS middleware
 app.add_middleware(
@@ -55,11 +63,13 @@ TUTOR_MODEL = "gpt-4o"
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.get("/test")
-async def test():
+@limiter.limit("5/minute")
+async def test(request: Request):
     return {"message": "Hello, World!"}
 
 @app.post("/generate-circuit", response_model=CircuitWithLayout)
-async def generate_circuit(data: CircuitGenerationRequest):
+@limiter.limit("10/minute")
+async def generate_circuit(request: Request, data: CircuitGenerationRequest):
     api_start_time = time.perf_counter()
     try:
         response = await client.beta.chat.completions.parse(
@@ -100,7 +110,8 @@ async def generate_circuit(data: CircuitGenerationRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/tutor-circuit", response_model=CircuitTutorResponse)
-async def tutor_circuit(data: CircuitTutorRequest):
+@limiter.limit("5/minute")
+async def tutor_circuit(request: Request, data: CircuitTutorRequest):
     try:
         circuit_context = json.dumps(data.circuit_data.model_dump())
         
@@ -130,7 +141,8 @@ async def tutor_circuit(data: CircuitTutorRequest):
     
 
 @app.get("/voltage-divider", response_model=CircuitWithLayout)
-def send_voltage_divider():
+@limiter.limit("5/minute")
+def send_voltage_divider(request: Request):
     try:
         with open("examples/voltage_divider.json", "r") as f:
             data = json.load(f)
@@ -139,7 +151,8 @@ def send_voltage_divider():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/current-divider", response_model=CircuitWithLayout)
-def send_current_divider():
+@limiter.limit("5/minute")
+def send_current_divider(request: Request):
     try:
         with open("examples/current_divider.json", "r") as f:
             data = json.load(f)
