@@ -142,7 +142,6 @@ async def tutor_circuit(request: Request, data: CircuitTutorRequest):
     
 
 @app.get("/voltage-divider", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_voltage_divider(request: Request):
     try:
         with open("example_circuit_layouts/voltage_divider.json", "r") as f:
@@ -152,7 +151,6 @@ def send_voltage_divider(request: Request):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/current-divider", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_current_divider(request: Request):
     try:
         with open("example_circuit_layouts/current_divider.json", "r") as f:
@@ -162,7 +160,6 @@ def send_current_divider(request: Request):
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/low-pass-filter", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_low_pass_filter(request: Request):
     try:
         with open("example_circuit_layouts/low_pass_filter.json", "r") as f:
@@ -172,7 +169,6 @@ def send_low_pass_filter(request: Request):
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/resistor-network", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_resistor_network(request: Request):
     try:
         with open("example_circuit_layouts/resistor_network.json", "r") as f:
