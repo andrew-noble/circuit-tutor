@@ -21,6 +21,7 @@ import time
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+import logging
 
 load_dotenv()
 
@@ -141,26 +142,41 @@ async def tutor_circuit(request: Request, data: CircuitTutorRequest):
     
 
 @app.get("/voltage-divider", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_voltage_divider(request: Request):
     try:
-        with open("examples/voltage_divider.json", "r") as f:
+        with open("example_circuit_layouts/voltage_divider.json", "r") as f:
             data = json.load(f)
         return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/current-divider", response_model=CircuitWithLayout)
-@limiter.limit("5/minute")
 def send_current_divider(request: Request):
     try:
-        with open("examples/current_divider.json", "r") as f:
+        with open("example_circuit_layouts/current_divider.json", "r") as f:
             data = json.load(f)
         return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-import logging
+@app.get("/low-pass-filter", response_model=CircuitWithLayout)
+def send_low_pass_filter(request: Request):
+    try:
+        with open("example_circuit_layouts/low_pass_filter.json", "r") as f:
+            data = json.load(f)
+        return CircuitWithLayout(**data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/resistor-network", response_model=CircuitWithLayout)
+def send_resistor_network(request: Request):
+    try:
+        with open("example_circuit_layouts/resistor_network.json", "r") as f:
+            data = json.load(f)
+        return CircuitWithLayout(**data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Configure logging manually
 logging.basicConfig(
     format="[%(asctime)s] [%(levelname)s] - %(message)s",

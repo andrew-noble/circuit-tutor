@@ -4,19 +4,13 @@ import Spinner from "./Spinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface CircuitFormProps {
+interface CircuitGeneratorFormProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
 
-const CIRCUIT_SUGGESTIONS = [
-  "Simple voltage divider with two resistors",
-  "Simple current divider with two resistors",
-  "Design an RC low-pass filter",
-  "Make a basic LED circuit with current-limiting resistor",
-  "Build a simple RLC circuit",
-];
-
-const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
+const CircuitGeneratorForm: React.FC<CircuitGeneratorFormProps> = ({
+  onCircuitReceived,
+}) => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,34 +27,6 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      onCircuitReceived(data);
-      setPrompt(""); // Clear the form after successful submission
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSuggestionClick = async (suggestion: string) => {
-    setPrompt(suggestion);
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/generate-circuit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: suggestion }),
       });
 
       if (!response.ok) {
@@ -96,20 +62,6 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
             className="form-control"
           />
         </div>
-        <label>Sample circuit prompts:</label>
-        <div className="suggestion-buttons">
-          {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => handleSuggestionClick(suggestion)}
-              disabled={isLoading}
-              className="suggestion-button"
-            >
-              {suggestion}
-            </button>
-          ))}
-        </div>
         {error && <div className="error-message">{error}</div>}
         <button
           type="submit"
@@ -123,4 +75,4 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
   );
 };
 
-export default CircuitForm;
+export default CircuitGeneratorForm;

@@ -57,14 +57,12 @@ const TutorForm: React.FC<TutorFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="tutor-form">
       <div className="form-group">
-        <label htmlFor="tutor-question">
-          Ask a question about the current circuit:
-        </label>
+        <label htmlFor="tutor-question">Get insight about the circuit:</label>
         <textarea
           id="tutor-question"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Examples: explain how this circuit works? What is the voltage across R1? How can I calculate equivalent resistance of this circuit?"
+          placeholder="Examples: What is the voltage across R1? How can I calculate equivalent resistance of this circuit?"
           rows={3}
           disabled={isLoading || !circuitData}
           className="form-control"

@@ -7,6 +7,9 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* Common Form Styles */
@@ -134,10 +137,6 @@ path {
   margin-top: 0;
   margin-bottom: 1rem;
   color: #333;
-}
-
-.tutor-form {
-  margin-bottom: 1.5rem;
 }
 
 .tutor-form .form-group {
@@ -301,4 +300,31 @@ path {
 
 .back-link:hover {
   background-color: rgba(0, 102, 204, 0.1);
+}
+
+.generator-button {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 8px 0;
+  align-self: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.generator-button:hover {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+  color: #212529;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.generator-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }

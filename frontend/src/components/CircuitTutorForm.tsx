@@ -3,11 +3,11 @@ import TutorForm from "./TutorForm";
 import TutorResponse from "./TutorResponse";
 import type { CircuitData } from "../types";
 
-interface CircuitTutorProps {
+interface CircuitTutorFormProps {
   circuitData: CircuitData | undefined;
 }
 
-const CircuitTutor: React.FC<CircuitTutorProps> = ({ circuitData }) => {
+const CircuitTutorForm: React.FC<CircuitTutorFormProps> = ({ circuitData }) => {
   const [tutorResponse, setTutorResponse] = useState<string | null>(null);
 
   return (
@@ -21,4 +21,4 @@ const CircuitTutor: React.FC<CircuitTutorProps> = ({ circuitData }) => {
   );
 };
 
-export default CircuitTutor;
+export default CircuitTutorForm;
