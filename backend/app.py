@@ -176,6 +176,15 @@ def send_resistor_network(request: Request):
         return CircuitWithLayout(**data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/led-circuit", response_model=CircuitWithLayout)
+def send_led_circuit(request: Request):
+    try:
+        with open("example_circuit_layouts/led_circuit.json", "r") as f:
+            data = json.load(f)
+        return CircuitWithLayout(**data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Configure logging manually
 logging.basicConfig(
