@@ -30,6 +30,7 @@ const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
 
   return (
     <div className="example-circuit-buttons">
+      <label htmlFor="circuit-buttons">Pick a circuit:</label>
       {error && <div className="error-message">{error}</div>}
       <div className="button-group">
         <button
