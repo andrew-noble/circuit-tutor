@@ -50,8 +50,8 @@ const CircuitGeneratorForm: React.FC<CircuitGeneratorFormProps> = ({
           <label htmlFor="circuit-prompt">Generate a circuit with AI:</label>
           <p style={{ color: "#e28743" }}>
             Only small circuits with a voltage source, resistors, capacitors,
-            and inductors are supported. You'll find limitations pretty quickly.
-            😊
+            and inductors are supported. It might take ~15s and you'll find the
+            limitations pretty quickly. 😊
           </p>
           <textarea
             id="circuit-prompt"
