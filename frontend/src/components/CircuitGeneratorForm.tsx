@@ -43,34 +43,6 @@ const CircuitGeneratorForm: React.FC<CircuitGeneratorFormProps> = ({
     }
   };
 
-  const handleSuggestionClick = async (suggestion: string) => {
-    setPrompt(suggestion);
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/generate-circuit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: suggestion }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      onCircuitReceived(data);
-      setPrompt(""); // Clear the form after successful submission
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="circuit-form-container">
       <form onSubmit={handleSubmit} className="circuit-form">
