@@ -4,19 +4,13 @@ import Spinner from "./Spinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface CircuitFormProps {
+interface CircuitGeneratorFormProps {
   onCircuitReceived: (circuit: CircuitData) => void;
 }
 
-const CIRCUIT_SUGGESTIONS = [
-  "Simple voltage divider with two resistors",
-  "Simple current divider with two resistors",
-  "Design an RC low-pass filter",
-  "Make a basic LED circuit with current-limiting resistor",
-  "Build a simple RLC circuit",
-];
-
-const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
+const CircuitGeneratorForm: React.FC<CircuitGeneratorFormProps> = ({
+  onCircuitReceived,
+}) => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,20 +90,6 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
             className="form-control"
           />
         </div>
-        <label>Sample circuit prompts:</label>
-        <div className="suggestion-buttons">
-          {CIRCUIT_SUGGESTIONS.map((suggestion, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => handleSuggestionClick(suggestion)}
-              disabled={isLoading}
-              className="suggestion-button"
-            >
-              {suggestion}
-            </button>
-          ))}
-        </div>
         {error && <div className="error-message">{error}</div>}
         <button
           type="submit"
@@ -123,4 +103,4 @@ const CircuitForm: React.FC<CircuitFormProps> = ({ onCircuitReceived }) => {
   );
 };
 
-export default CircuitForm;
+export default CircuitGeneratorForm;

@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CircuitVisualization from "./CircuitVisualization";
 import SampleCircuitButtons from "./SampleCircuitButtons";
-import CircuitTutor from "./CircuitTutor";
+import CircuitGeneratorForm from "./CircuitGeneratorForm";
+import CircuitTutorForm from "./CircuitTutorForm";
 import type { CircuitData } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const MainPage: React.FC = () => {
   const [circuitData, setCircuitData] = useState<CircuitData | undefined>();
+  const [showCircuitGeneratorForm, setShowCircuitGeneratorForm] =
+    useState(false);
 
   useEffect(() => {
     const fetchCircuit = async () => {
@@ -30,7 +33,7 @@ const MainPage: React.FC = () => {
   return (
     <div className="app">
       <div className="header">
-        <h1 style={{ height: "60px" }}>Circuit Tutor</h1>
+        <h1>Circuit Tutor</h1>
         <div className="header-links">
           <a
             href="https://forms.gle/xwDaoUbPF7cm1FmcA"
@@ -45,11 +48,23 @@ const MainPage: React.FC = () => {
           </Link>
         </div>
       </div>
+
       <SampleCircuitButtons onCircuitReceived={setCircuitData} />
-      {/* <CircuitForm onCircuitReceived={setCircuitData} /> */}
+
+      {showCircuitGeneratorForm ? (
+        <CircuitGeneratorForm onCircuitReceived={setCircuitData} />
+      ) : (
+        <button
+          className="generator-button"
+          onClick={() => setShowCircuitGeneratorForm(true)}
+        >
+          Text-to-Circuit Generation (beta)
+        </button>
+      )}
 
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
-      <CircuitTutor circuitData={circuitData} />
+
+      <CircuitTutorForm circuitData={circuitData} />
     </div>
   );
 };
