@@ -108,7 +108,10 @@ export class NetRenderer {
 
     netGroups.each((netData: NetData, i: number) => {
       const isLastNet = i === circuitData.nets.length - 1;
-      d3.select<SVGGElement, NetData>(netGroups.nodes()[i])
+      const netGroup = d3.select<SVGGElement, NetData>(netGroups.nodes()[i]);
+
+      // Add connection paths
+      netGroup
         .selectAll<SVGPathElement, [string, string]>("path")
         .data(netData.connections)
         .join("path")
@@ -122,6 +125,28 @@ export class NetRenderer {
         .attr("stroke", "black")
         .attr("stroke-width", 2)
         .attr("fill", "none");
+
+      // Add black dot at net position
+      const netPos = {
+        x: this.scaleManager.scaleX(netData.position.x),
+        y: this.scaleManager.scaleY(netData.position.y),
+      };
+
+      netGroup
+        .append("circle")
+        .attr("cx", netPos.x)
+        .attr("cy", netPos.y)
+        .attr("r", 4)
+        .attr("fill", "black");
+
+      // Add net name annotation
+      netGroup
+        .append("text")
+        .attr("x", netPos.x)
+        .attr("y", netPos.y - 8)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "bottom")
+        .text(netData.id);
     });
   }
 }
