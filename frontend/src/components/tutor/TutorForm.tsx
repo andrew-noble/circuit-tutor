@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import type { CircuitData } from "../types";
-import Spinner from "./Spinner";
+import type { CircuitData } from "../../types";
+import Spinner from "../Spinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -57,7 +57,9 @@ const TutorForm: React.FC<TutorFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="tutor-form">
       <div className="form-group">
-        <label htmlFor="tutor-question">Get insight about the circuit:</label>
+        <label htmlFor="tutor-question">
+          Ask a question about the circuit:
+        </label>
         <textarea
           id="tutor-question"
           value={question}
@@ -69,11 +71,6 @@ const TutorForm: React.FC<TutorFormProps> = ({
         />
       </div>
       {error && <div className="error-message">{error}</div>}
-      {!circuitData && (
-        <div className="info-message">
-          Generate a circuit first to ask questions about it
-        </div>
-      )}
       <button
         type="submit"
         disabled={isLoading || !question.trim() || !circuitData}

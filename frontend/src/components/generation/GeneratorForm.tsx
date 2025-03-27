@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import type { CircuitData } from "../types";
-import Spinner from "./Spinner";
+import type { CircuitData } from "../../types";
+import Spinner from "../Spinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -49,14 +49,15 @@ const CircuitGeneratorForm: React.FC<CircuitGeneratorFormProps> = ({
         <div className="form-group">
           <label htmlFor="circuit-prompt">Generate a circuit with AI:</label>
           <p style={{ color: "#e28743" }}>
-            Currently, only circuits with a single voltage source and resistors,
-            inductors, capacitors, and diodes are supported.
+            Only small circuits with a voltage source, resistors, capacitors,
+            and inductors are supported. You'll find limitations pretty quickly.
+            😊
           </p>
           <textarea
             id="circuit-prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Example: Create a voltage divider with two resistors, one 1kOhm and the other 2kOhm. Voltage source is 5V."
+            placeholder="Example: Create a voltage divider with three resistors ranging from 1kOhm to 3kOhm and a voltage source of 5V."
             rows={3}
             disabled={isLoading}
             className="form-control"
