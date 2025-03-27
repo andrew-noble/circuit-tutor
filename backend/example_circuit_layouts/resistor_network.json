@@ -1,0 +1,133 @@
+{
+  "components": [
+    {
+      "id": "V1",
+      "type": "voltage_source",
+      "value": "5V",
+      "pins": ["+", "-"],
+      "position": {
+        "x": 0,
+        "y": 0,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R1",
+      "type": "resistor",
+      "value": "1kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 2,
+        "y": -2,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R2",
+      "type": "resistor",
+      "value": "2kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 2,
+        "y": 0,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R3",
+      "type": "resistor",
+      "value": "3kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 2,
+        "y": 2,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R4",
+      "type": "resistor",
+      "value": "4kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 4,
+        "y": -1,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R5",
+      "type": "resistor",
+      "value": "6kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 4,
+        "y": 1,
+        "rotation": 0.0
+      }
+    },
+    {
+      "id": "R6",
+      "type": "resistor",
+      "value": "1kΩ",
+      "pins": ["a", "b"],
+      "position": {
+        "x": 6,
+        "y": 0,
+        "rotation": 0.0
+      }
+    }
+  ],
+  "nets": [
+    {
+      "id": "N1",
+      "connections": [
+        ["V1", "+"],
+        ["R1", "a"],
+        ["R2", "a"],
+        ["R3", "a"]
+      ],
+      "position": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
+      "id": "N2",
+      "connections": [
+        ["R1", "b"],
+        ["R2", "b"],
+        ["R3", "b"],
+        ["R4", "a"],
+        ["R5", "a"]
+      ],
+      "position": {
+        "x": 3,
+        "y": 0
+      }
+    },
+    {
+      "id": "N3",
+      "connections": [
+        ["R4", "b"],
+        ["R5", "b"],
+        ["R6", "a"]
+      ],
+      "position": {
+        "x": 5,
+        "y": 0
+      }
+    },
+    {
+      "id": "N4",
+      "connections": [
+        ["R6", "b"],
+        ["V1", "-"]
+      ],
+      "position": {
+        "x": 7,
+        "y": 0
+      }
+    }
+  ]
+}

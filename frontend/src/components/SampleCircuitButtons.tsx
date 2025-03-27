@@ -32,21 +32,29 @@ const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
     <div className="example-circuit-buttons">
       {error && <div className="error-message">{error}</div>}
       <div className="button-group">
-        <p>
-          Circuit generation can take ~15s. Try these instant sample circuits if
-          you want to use the tutor right away:
-        </p>
         <button
           onClick={() => fetchCircuit("voltage-divider")}
           className="example-button"
         >
-          Load Sample Voltage Divider
+          Voltage Divider
         </button>
         <button
           onClick={() => fetchCircuit("current-divider")}
           className="example-button"
         >
-          Load Sample Current Divider
+          Current Divider
+        </button>
+        <button
+          onClick={() => fetchCircuit("low-pass-filter")}
+          className="example-button"
+        >
+          RC Low-Pass Filter
+        </button>
+        <button
+          onClick={() => fetchCircuit("resistor-network")}
+          className="example-button"
+        >
+          Resistor Network
         </button>
       </div>
     </div>
