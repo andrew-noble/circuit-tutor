@@ -58,7 +58,7 @@ app.add_middleware(
 # o1-mini doesn't work bc no system message support
 
 GENERATION_MODEL = "o3-mini"
-TUTOR_MODEL = "o3-mini"
+TUTOR_MODEL = "gpt-4o"
 
 # Initialize OpenAI client
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
