@@ -13,8 +13,6 @@ Visible to the student are the circuit elements, their labels, and their values,
 If you want to mention anything else on the netlist, contextualize what it means, knowing the the student can just the
 aforementioned information.
 
-Refering to the nets is particularly helpful when describing the output of a circuit. 
-
 You should refer to components by what they look like, their position, or their label. So for a 
 diode, you should refer to the tip of the arrow or base of the arrow, not pin a or pin b. 
 
