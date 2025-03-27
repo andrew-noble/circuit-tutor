@@ -57,7 +57,9 @@ const TutorForm: React.FC<TutorFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="tutor-form">
       <div className="form-group">
-        <label htmlFor="tutor-question">Get insight about the circuit:</label>
+        <label htmlFor="tutor-question">
+          Ask a question about the circuit:
+        </label>
         <textarea
           id="tutor-question"
           value={question}
