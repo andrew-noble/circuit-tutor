@@ -1,5 +1,5 @@
 import React from "react";
-import type { CircuitData } from "../types";
+import type { CircuitData } from "../../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -55,6 +55,12 @@ const DebugCircuitButtons: React.FC<SampleCircuitButtonsProps> = ({
           className="example-button"
         >
           Resistor Network
+        </button>
+        <button
+          onClick={() => fetchCircuit("led-circuit")}
+          className="example-button"
+        >
+          LED Circuit
         </button>
       </div>
     </div>

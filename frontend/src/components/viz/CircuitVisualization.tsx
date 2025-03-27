@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { CircuitData } from "../types";
-import { CircuitRenderer, rendererConfig } from "../services/renderer";
+import { CircuitData } from "../../types";
+import { CircuitRenderer, rendererConfig } from "../../services/renderer";
 
 interface CircuitVisualizationProps {
   width?: number;

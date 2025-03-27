@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CircuitVisualization from "./CircuitVisualization";
-import SampleCircuitButtons from "./SampleCircuitButtons";
-import CircuitGeneratorForm from "./CircuitGeneratorForm";
-import CircuitTutorForm from "./CircuitTutorForm";
+import CircuitVisualization from "./viz/CircuitVisualization";
+import CircuitButtons from "./generation/CircuitButtons";
+import CircuitGeneratorForm from "./generation/GeneratorForm";
+import Tutor from "./tutor/Tutor";
 import type { CircuitData } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -49,22 +49,21 @@ const MainPage: React.FC = () => {
         </div>
       </div>
 
-      <SampleCircuitButtons onCircuitReceived={setCircuitData} />
+      <CircuitButtons onCircuitReceived={setCircuitData} />
 
-      {showCircuitGeneratorForm ? (
+      {showCircuitGeneratorForm && (
         <CircuitGeneratorForm onCircuitReceived={setCircuitData} />
-      ) : (
-        <button
-          className="generator-button"
-          onClick={() => setShowCircuitGeneratorForm(true)}
-        >
-          Text-to-Circuit Generation (beta)
-        </button>
       )}
 
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
 
-      <CircuitTutorForm circuitData={circuitData} />
+      <Tutor circuitData={circuitData} />
+      <button
+        className="generator-button"
+        onClick={() => setShowCircuitGeneratorForm((prev) => !prev)}
+      >
+        Text-to-Circuit Generation (beta)
+      </button>
     </div>
   );
 };
