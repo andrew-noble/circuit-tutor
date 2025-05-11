@@ -36,6 +36,15 @@ const MainPage: React.FC = () => {
         <h1>Circuit Tutor</h1>
         <div className="header-links">
           <a
+            href="https://www.loom.com/share/f82e56015c594f72849e23723d4216f8?sid=39a86c84-54e2-4c5b-80b3-c54f8b8ae4cb"
+            className="info-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Loom Demo
+          </a>
+
+          <a
             href="https://forms.gle/xwDaoUbPF7cm1FmcA"
             className="info-link"
             target="_blank"
