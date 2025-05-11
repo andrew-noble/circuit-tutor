@@ -57,22 +57,30 @@ const MainPage: React.FC = () => {
           </Link>
         </div>
       </div>
-
-      <CircuitButtons onCircuitReceived={setCircuitData} />
-
-      {showCircuitGeneratorForm && (
-        <CircuitGeneratorForm onCircuitReceived={setCircuitData} />
+      {!showCircuitGeneratorForm ? (
+        <>
+          <CircuitButtons onCircuitReceived={setCircuitData} />
+          <button
+            className="generator-button"
+            onClick={() => setShowCircuitGeneratorForm((prev) => !prev)}
+          >
+            Generate Circuit with AI (beta)
+          </button>
+        </>
+      ) : (
+        <>
+          <CircuitGeneratorForm onCircuitReceived={setCircuitData} />
+          <button
+            className="generator-button"
+            onClick={() => setShowCircuitGeneratorForm((prev) => !prev)}
+          >
+            Back to Pre-made Circuits
+          </button>
+        </>
       )}
-
       {circuitData && <CircuitVisualization circuitData={circuitData} />}
 
       <Tutor circuitData={circuitData} />
-      <button
-        className="generator-button"
-        onClick={() => setShowCircuitGeneratorForm((prev) => !prev)}
-      >
-        Text-to-Circuit Generation (beta)
-      </button>
     </div>
   );
 };
